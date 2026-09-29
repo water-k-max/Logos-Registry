@@ -1,0 +1,23 @@
+
+wrote /home/user/provenance/artifacts/m-b-evidence.txt (74434 bytes)
+CHECK_EXIT=0
+test result: ok. 19 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 8.41s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+SDK_TEST_EXIT=0
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 20 filtered out; finished in 1.37s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+LIVE_READ_EXIT=0
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 20 filtered out; finished in 30.02s
+STORAGE_LIVE_EXIT=101 (non-zero is the honest current state, task #14)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+LEZREG_TEST_EXIT=0
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+LEZBUILD_TEST_EXIT=0
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+CORE_TEST_EXIT=0
+VERIFY_EXIT=0
+VERIFY_STRICT_EXIT=2
+MANIFEST_OFFLINE_EXIT=0 (written to /tmp only; the pinned artifacts/reproducible-build.json is untouched)
+OUTSIDE_EXITS_EXIT=0 (0 means the whole exit-code contract held)
