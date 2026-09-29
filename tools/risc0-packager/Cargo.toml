@@ -1,0 +1,10 @@
+[package]
+name = "risc0-packager"
+version = "0.1.0"
+edition = "2021"
+description = "ELF -> RISC Zero image .bin packager (vendored from lez-programs tools/risc0-packager, Apache-2.0/MIT)"
+
+[dependencies]
+anyhow = "1"
+risc0-binfmt = "=3.0.4"
+risc0-build = "=3.0.5"

@@ -1,0 +1,20 @@
+[package]
+name = "provenance-guest"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+
+[[bin]]
+name = "provenance"
+path = "src/bin/provenance.rs"
+
+[dependencies]
+spel-framework = { git = "https://github.com/logos-co/spel.git", rev = "1ef0500f8fc8ce3ddf95523726ae159db83f744f", package = "spel-framework" }
+nssa_core = { git = "https://github.com/logos-blockchain/logos-execution-zone.git", tag = "v0.2.4", package = "lee_core" }
+clock_core = { git = "https://github.com/logos-blockchain/logos-execution-zone.git", tag = "v0.2.4" }
+risc0-zkvm = { version = "=3.0.5", features = ["std"] }
+provenance_core = { path = "../../provenance_core" }
+serde = { version = "1.0", features = ["derive"] }
+borsh = "1.5"
+ruint = "=1.17.0"

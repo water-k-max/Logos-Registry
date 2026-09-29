@@ -1,0 +1,10 @@
+target/
+methods/guest/target/
+*.bin
+.provenance-state
+.provenance-state.tmp
+ui/
+
+# The sdk tests read real chain bytes, not mocks; those fixtures are part of the source,
+# unlike artifacts/*.bin which the recipe reproduces.
+!sdk/tests/fixtures/*.bin

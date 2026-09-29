@@ -1,0 +1,18 @@
+[package]
+name = "lezbuild"
+version = "0.1.0"
+edition = "2021"
+description = "Reproducible-build manifest generator + ImageID verifier for the Provenance registry"
+
+# Deliberately NOT a workspace member (see ../../IMPLEMENTATION_PLAN.md §0.9):
+# anything inside the guest's workspace graph can move the deployed ImageID.
+
+[[bin]]
+name = "lezbuild"
+path = "src/main.rs"
+
+[dependencies]
+sha2 = "0.10"
+serde_json = "1"
+toml = "0.8"
+hex = "0.4"

@@ -1,0 +1,197 @@
+# generated 2026-09-28T22:47:35Z by scripts/m_b_evidence.sh (read-only)
+# rustc: rustc 1.98.1 (48a229cea 2026-09-01)
+
+=== 1. workspace checks without the risc0 build flow ===
+warning: unused doc comment
+ --> examples/src/bin/generate_idl.rs:1:1
+  |
+1 | / /// Generate IDL JSON for the provenance program.
+2 | | ///
+3 | | /// Usage:
+4 | | ///   cargo run --bin generate_idl > provenance-idl.json
+  | |_-------------------------------------------------------^
+  |   |
+  |   rustdoc does not generate documentation for macro invocations
+  |
+  = help: to document an item produced by a macro, the macro must produce the documentation as part of its expansion
+  = note: `#[warn(unused_doc_comments)]` (part of `#[warn(unused)]`) on by default
+
+warning: `provenance-examples` (bin "generate_idl" test) generated 1 warning
+warning: `provenance-examples` (bin "generate_idl") generated 1 warning (1 duplicate)
+   Compiling provenance-methods v0.1.0 (/home/user/provenance/methods)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.78s
+CHECK_EXIT=0
+
+=== 2. SDK unit + integration tests (hermetic) ===
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.89s
+     Running unittests src/lib.rs (target/debug/deps/provenance_sdk-861452cf528db751)
+
+running 21 tests
+test chain::tests::a_missing_account_is_recognised_not_decoded ... ok
+test chain::tests::live_reads_the_deployed_entry ... ignored
+test chain::tests::a_third_party_entry_is_not_in_the_subjects_own_namespace ... ok
+test chain::tests::derived_entry_pda_is_the_live_entry_account ... ok
+test chain::tests::pinned_registry_constant_is_the_deployed_image_id ... ok
+test chain::tests::other_pda_spaces_are_distinct_and_stable ... ok
+test chain::tests::an_account_owned_by_another_program_is_rejected ... ok
+test chain::tests::program_id_is_image_id_as_little_endian_limbs ... ok
+test chain::tests::trailing_or_truncated_data_is_a_decode_error ... ok
+test chain::tests::url_and_registry_defaults ... ok
+test chain::tests::the_live_entry_decodes_and_binds_what_it_claims ... ok
+test cid::tests::cid_roundtrips_through_digest ... ok
+test cid::tests::known_vectors_match_python_computed ... ok
+test storage::tests::rest_smoke_against_live_gateway ... ignored
+test storage::tests::base_url_defaults_and_trims ... ok
+test cid::tests::non_sha256_and_garbage_are_rejected ... ok
+test verify::tests::digest_binds_field_order ... ok
+test verify::tests::tampered_materials_or_sig_are_rejected ... ok
+test verify::tests::honest_attestation_verifies ... ok
+test verify::tests::trust_store_gates_unknown_keys ... ok
+test chain::tests::transport_failure_is_reported_not_panicked ... ok
+
+test result: ok. 19 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 8.41s
+
+   Doc-tests provenance_sdk
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+SDK_TEST_EXIT=0
+
+=== 3. SDK live read (ignored test, real testnet RPC) ===
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.27s
+     Running unittests src/lib.rs (target/debug/deps/provenance_sdk-861452cf528db751)
+
+running 1 test
+tip: block 29288
+entry revision 1 registered_at 1790606384850
+test chain::tests::live_reads_the_deployed_entry ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 20 filtered out; finished in 1.50s
+
+   Doc-tests provenance_sdk
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+LIVE_READ_EXIT=0
+
+=== 4. Storage REST smoke against a live gateway (expected to fail: no local :8080) ===
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.37s
+     Running unittests src/lib.rs (target/debug/deps/provenance_sdk-861452cf528db751)
+
+running 1 test
+
+thread 'storage::tests::rest_smoke_against_live_gateway' (766) panicked at src/storage.rs:130:45:
+called `Result::unwrap()` on an `Err` value: Storage("POST /data: http://localhost:8080/api/storage/v1/data: Connection Failed: Connect error: connection timed out")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test storage::tests::rest_smoke_against_live_gateway ... FAILED
+
+failures:
+
+failures:
+    storage::tests::rest_smoke_against_live_gateway
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 20 filtered out; finished in 30.03s
+
+error: test failed, to rerun pass `--lib`
+STORAGE_LIVE_EXIT=101 (non-zero is the honest current state, task #14)
+
+=== 5. lezreg tests: ABI mirror + CLI contract + namespace regression ===
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.91s
+     Running unittests src/main.rs (/home/user/provenance/target/debug/deps/lezreg-85a656951078da41)
+
+running 2 tests
+test instruction::tests::mirror_shape_compiles ... ok
+test instruction::tests::idl_matches_host_mirror ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/cli_errors.rs (/home/user/provenance/target/debug/deps/cli_errors-ba2ac6cecce91760)
+
+running 8 tests
+test a_missing_value_is_not_silently_taken_as_the_next_flag ... ok
+test an_unknown_command_is_reported ... ok
+test a_missing_required_flag_names_the_flag_and_exits_2 ... ok
+test a_third_party_subject_is_registered_in_the_registry_namespace ... ok
+test the_self_subject_still_derives_the_live_entry_account ... ok
+test no_arguments_prints_usage_with_exit_2 ... ok
+test bad_hex_names_the_argument_instead_of_asserting_on_length ... ok
+test overriding_the_registry_namespace_moves_the_derived_account ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+LEZREG_TEST_EXIT=0
+
+=== 6. lezbuild tests (guest graph, seed parsing, exit-code contract) ===
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running unittests src/main.rs (target/debug/deps/lezbuild-1b68016addf554bb)
+
+running 9 tests
+test tests::recipe_parses_the_repo_dockerfile ... ok
+test tests::guest_graph_follows_path_deps_and_skips_registry_deps ... ok
+test tests::pruned_dirs_are_never_hashed ... ok
+test tests::tree_hash_moves_on_content_change_and_on_rename ... ok
+test tests::offline_placeholders_are_marked_pending_not_fake ... ok
+test tests::a_file_outside_the_guest_graph_is_informational_only ... ok
+test tests::manifest_is_byte_deterministic ... ok
+test tests::the_exit_code_encodes_which_claim_broke ... ok
+test tests::a_manifest_only_edit_is_named_not_just_detected ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+LEZBUILD_TEST_EXIT=0
+
+=== 7. provenance_core unit tests ===
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.69s
+     Running unittests src/lib.rs (target/debug/deps/provenance_core-99438eb672548f16)
+
+running 5 tests
+test tests::entry_roundtrips_through_borsh ... ok
+test tests::meta_limits_are_enforced ... ok
+test tests::update_requires_authority_and_bumps_revision ... ok
+test tests::verification_and_claim_roundtrip ... ok
+test tests::index_bucket_caps_and_dedupes ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests provenance_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+CORE_TEST_EXIT=0
+
+=== 8. namespace demonstration, dry run only (self vs third-party subject) ===
+registry (callee)     7b4040d30bc2354f5cfddedaea1a8a088ae6876f375220884485ea7d2e7b0bd6
+subject  (ImageID)    7b4040d30bc2354f5cfddedaea1a8a088ae6876f375220884485ea7d2e7b0bd6
+program_id limbs      [3544203387, 1328923147, 3672046940, 143268586, 1871177354, 2283819575, 2112521540, 3591076654]
+note                  subject == registry (self-entry): both derivations agree here
+accounts              Hm4Yzd2vgTCvhvPFQUzLT2xoYidRK84QYBzPLQnH8dbJ, 8tWS2X8e59Q4FYUUExxxFzpNjbQirzkFjDjYSukVzsqe, 4BdcjoXkq786TMWcBGGHqcxeLYMZmn17rL4eM9ZyRWNU
+instruction words     91 u32 words
+instruction_data      [0,123,64,64,211,11,194,53,79,92,253,222,218,234,26,138,8,138,230,135,111,55,82,32,136,68,133,234,125,46,123,11,214,4,68,101,109,111,5,48,46,49,46,48,4,68,101,109,111,4,100,101,109,111,2,1,97,1,98,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+dry run: nothing submitted (add --send to submit)
+==================
+registry (callee)     7b4040d30bc2354f5cfddedaea1a8a088ae6876f375220884485ea7d2e7b0bd6
+subject  (ImageID)    eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+program_id limbs      [3544203387, 1328923147, 3672046940, 143268586, 1871177354, 2283819575, 2112521540, 3591076654]
+accounts              AK8MjziZ38Hi8urRrJ55r1VspwUSyLaiGwcNXyvEcBM7, 8tWS2X8e59Q4FYUUExxxFzpNjbQirzkFjDjYSukVzsqe, 4BdcjoXkq786TMWcBGGHqcxeLYMZmn17rL4eM9ZyRWNU
+instruction words     91 u32 words
+instruction_data      [0,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,238,4,68,101,109,111,5,48,46,49,46,48,4,68,101,109,111,4,100,101,109,111,2,1,97,1,98,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+dry run: nothing submitted (add --send to submit)
+==================
+
+=== 9. drift split on the real repo: exit 0 plain, exit 2 under --strict ===
+VERIFY_EXIT=0
+manifest: 2 guest-graph crate manifests, 821 external crates, source tree 4d37847bbbf393317287003f361b884144ab3b3decc6a062672169e9fd3017f2
+GUEST GRAPH MATCHES — every guest-graph manifest, source file, Cargo.lock and dependency set is what the build was claimed from
+
+informational: 19 file(s) outside the guest graph differ, so this manifest no longer describes the tree byte for byte (re-generate it before publishing):
+  scripts/check_drift_split.sh
+VERIFY_STRICT_EXIT=2
+MANIFEST_OFFLINE_EXIT=0 (written to /tmp only; the pinned artifacts/reproducible-build.json is untouched)

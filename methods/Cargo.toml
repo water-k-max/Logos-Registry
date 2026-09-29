@@ -1,0 +1,17 @@
+[package]
+name = "provenance-methods"
+version = "0.1.0"
+edition = "2021"
+
+[build-dependencies]
+risc0-build = "=3.0.5"
+
+[dependencies]
+risc0-zkvm = { version = "=3.0.5", features = ["std"] }
+provenance_core = { path = "../provenance_core" }
+
+# risc0-build 3.0.5 `embed_methods()` reads this and does `pkg.metadata.get("risc0").unwrap()`,
+# so a missing table panics the build script even when RISC0_SKIP_BUILD is set. Host-side only:
+# `methods/guest` is built by its own manifest and is not a member, so this cannot move the ImageID.
+[package.metadata.risc0]
+methods = ["guest"]

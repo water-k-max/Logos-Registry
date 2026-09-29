@@ -1,0 +1,156 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from build-guest.Dockerfile
+#1 transferring dockerfile: 5.74kB done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/risczero/risc0-guest-builder:r0.1.88.0
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 DONE 0.0s
+
+#5 [build 1/4] FROM docker.io/risczero/risc0-guest-builder:r0.1.88.0@sha256:3e12f71bacd27527a61dea96fa0e53e468c99aa261d3a1019b593f6dbd943eb3
+#5 resolve docker.io/risczero/risc0-guest-builder:r0.1.88.0@sha256:3e12f71bacd27527a61dea96fa0e53e468c99aa261d3a1019b593f6dbd943eb3 0.0s done
+#5 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 677.76kB 0.1s done
+#4 DONE 0.1s
+
+#6 [build 2/4] WORKDIR /src
+#6 CACHED
+
+#7 [build 3/4] COPY . .
+#7 DONE 0.3s
+
+#8 [build 4/4] RUN --mount=type=cache,id=prov-pull-1790685227-cargo-git,sharing=locked,target=/root/.cargo/git     --mount=type=cache,id=prov-pull-1790685227-cargo-registry,sharing=locked,target=/root/.cargo/registry     --mount=type=cache,id=prov-pull-1790685227-target,sharing=locked,target=/src/target/prov-guest <<'EOF' (set -eu...)
+#8 0.701 NO-GIT-SEED: relying on .cargo/config.toml source replacement
+#8 0.703 ==> Building provenance guest
+#8 1.448     Updating crates.io index
+#8 1.448     Updating git repository `https://github.com/logos-blockchain/logos-execution-zone.git`
+#8 243.0 error: failed to get `clock_core` as a dependency of package `provenance-guest v0.1.0 (/src/methods/guest)`
+#8 243.0 
+#8 243.0 Caused by:
+#8 243.0   failed to load source for dependency `clock_core`
+#8 243.0 
+#8 243.0 Caused by:
+#8 243.0   Unable to update https://github.com/logos-blockchain/logos-execution-zone.git?tag=v0.2.4#47eba256
+#8 243.0 
+#8 243.0 Caused by:
+#8 243.0   failed to clone into: /root/.cargo/git/db/logos-execution-zone-6bae42d7c9cadfe7
+#8 243.0 
+#8 243.0 Caused by:
+#8 243.0   revision 47eba256479f6f785acbd138834340703cd03401 not found
+#8 243.0 
+#8 243.0 Caused by:
+#8 243.0   network failure seems to have happened
+#8 243.0   if a proxy or similar is necessary `net.git-fetch-with-cli` may help here
+#8 243.0   https://doc.rust-lang.org/cargo/reference/config.html#netgit-fetch-with-cli
+#8 243.0 
+#8 243.0 Caused by:
+#8 243.0   SSL error: unknown error; class=Ssl (16)
+#8 ERROR: process "/bin/sh -c set -eu\n\n# Two ways the offline seeds can arrive: in the build CONTEXT (/src/gitdb, /src/regcache — what\n# scripts/build_guest.sh stages) or in the BUILDER IMAGE (/opt/prov-seed/... — what\n# docker/builder-seeded.Dockerfile bakes, so one image digest pins toolchain + dependency set).\n# The image route has to land in /src first, and that is not cosmetic: a BuildKit cache mount\n# SHADOWS whatever the image had at that path. Measured on 2026-09-28 — baking the seeds straight\n# into /root/.cargo/{git,registry} produced `cp: cannot stat '/src/gitdb/.': No such file or\n# directory`, because the guard below saw an empty fresh cache sitting on top of the baked tree.\n# So the image seed is staged to /src and takes the identical code path as a context seed.\nif [ ! -d /src/gitdb ] && [ -d /opt/prov-seed/gitdb ]; then\n    mkdir -p /src/gitdb\n    cp -a /opt/prov-seed/gitdb/. /src/gitdb/\n    echo \"STAGED-FROM-IMAGE gitdb\"\nfi\nif [ ! -d /src/regcache ] && [ -d /opt/prov-seed/regcache ]; then\n    mkdir -p /src/regcache\n    cp -a /opt/prov-seed/regcache/. /src/regcache/\n    echo \"STAGED-FROM-IMAGE regcache\"\nfi\n\nmkdir -p /root/.cargo/git/db\nif [ ! -d /root/.cargo/git/db/logos-execution-zone-6bae42d7c9cadfe7 ]; then\n    if [ -d /src/gitdb ]; then\n        cp -a /src/gitdb/. /root/.cargo/git/db/\n        du -sh /root/.cargo/git/db | sed 's/^/SEEDED /'\n    else\n        # Legal only in a vendored build (see VENDORED MODE below): the git dependency is\n        # resolved from `vendor/` through source replacement, so an empty git cache is fine.\n        echo \"NO-GIT-SEED: relying on .cargo/config.toml source replacement\"\n    fi\nfi\n\n# SEALED MODE (opt-in: scripts/build_guest.sh with REGCACHE=<dir> puts a crates.io cache at\n# /src/regcache). Measured reason it exists: with fresh BuildKit cache mounts and only the git\n# DB seeded, `cargo build --locked` has to reach crates.io and dies here on\n# `[28] Timeout was reached` — Cargo.lock + git DB are NOT a complete input set. The registry\n# cache is a second build input, so ship it and forbid the network instead of hanging on it.\nif [ -d /src/regcache ]; then\n    mkdir -p /root/.cargo/registry\n    if [ -z \"$(ls -A /root/.cargo/registry 2>/dev/null || true)\" ]; then\n        cp -a /src/regcache/. /root/.cargo/registry/\n        du -sh /root/.cargo/registry | sed 's/^/SEEDED-REGISTRY /'\n    fi\n    export CARGO_NET_OFFLINE=true\n    echo \"==> SEALED BUILD: registry from /src/regcache, cargo network disabled\"\nfi\n\n# VENDORED MODE (opt-in: scripts/build_guest.sh with VENDOR=<dir> puts `cargo vendor` output at\n# /src/vendor plus the source-replacement config at /src/.cargo/config.toml). This is the third\n# and best answer to \"what are the build inputs\": the dependency *sources* become declared content\n# of the input set, so neither cargo cache is an input and the pinned upstream image alone is\n# enough. The unresolved question is byte-identity: vendored sources live at a different path than\n# /root/.cargo/registry/src/..., so it is only safe to claim this builds the SAME program if the\n# ImageID is re-measured. Measured here: the deployed ELF embeds no dependency source paths at all\n# (strings shows only the toolchain's own /opt/actions-runner/... std paths and our\n# src/bin/provenance.rs), which is the reason the experiment is expected to match — not proof.\nif [ -f /src/.cargo/config.toml ] && [ -d /src/vendor ]; then\n    export CARGO_NET_OFFLINE=true\n    du -sh /src/vendor | sed 's/^/VENDORED /'\n    du -sh /root/.cargo/git /root/.cargo/registry 2>/dev/null | sed 's/^/CACHES-STILL-CONSUMED-BY /'\n    echo \"==> VENDORED BUILD: sources from /src/vendor, cargo network disabled\"\nfi\n\ntarget_triple=\"riscv32im-risc0-zkvm-elf\"\nunit_separator=\"$(printf '\\037')\"\nguest_rustflags=\"-C${unit_separator}passes=lower-atomic${unit_separator}-C${unit_separator}link-arg=-Ttext=0x00200800${unit_separator}-C${unit_separator}link-arg=--fatal-warnings${unit_separator}-C${unit_separator}panic=abort${unit_separator}--cfg${unit_separator}getrandom_backend=\\\"custom\\\"\"\nexport CARGO_ENCODED_RUSTFLAGS=\"${guest_rustflags}\"\n\necho \"==> Building provenance guest\"\ncargo +risc0 build --release --locked --target \"${target_triple}\" --manifest-path methods/guest/Cargo.toml\n\nmkdir -p /guest-output\ncp \"${CARGO_TARGET_DIR}/${target_triple}/release/provenance\" /guest-output/provenance.elf\nsha256sum /guest-output/provenance.elf\nls -la /guest-output\n" did not complete successfully: exit code: 101
+------
+ > [build 4/4] RUN --mount=type=cache,id=prov-pull-1790685227-cargo-git,sharing=locked,target=/root/.cargo/git     --mount=type=cache,id=prov-pull-1790685227-cargo-registry,sharing=locked,target=/root/.cargo/registry     --mount=type=cache,id=prov-pull-1790685227-target,sharing=locked,target=/src/target/prov-guest <<'EOF' (set -eu...):
+243.0 Caused by:
+243.0   revision 47eba256479f6f785acbd138834340703cd03401 not found
+243.0 
+243.0 Caused by:
+243.0   network failure seems to have happened
+243.0   if a proxy or similar is necessary `net.git-fetch-with-cli` may help here
+243.0   https://doc.rust-lang.org/cargo/reference/config.html#netgit-fetch-with-cli
+243.0 
+243.0 Caused by:
+243.0   SSL error: unknown error; class=Ssl (16)
+------
+build-guest.Dockerfile:21
+--------------------
+  20 |     
+  21 | >>> RUN --mount=type=cache,id=${PROV_BUILD_CACHE_ID}-cargo-git,sharing=locked,target=/root/.cargo/git \
+  22 | >>>     --mount=type=cache,id=${PROV_BUILD_CACHE_ID}-cargo-registry,sharing=locked,target=/root/.cargo/registry \
+  23 | >>>     --mount=type=cache,id=${PROV_BUILD_CACHE_ID}-target,sharing=locked,target=/src/target/prov-guest <<'EOF'
+  24 | >>> set -eu
+  25 | >>> 
+  26 | >>> # Two ways the offline seeds can arrive: in the build CONTEXT (/src/gitdb, /src/regcache — what
+  27 | >>> # scripts/build_guest.sh stages) or in the BUILDER IMAGE (/opt/prov-seed/... — what
+  28 | >>> # docker/builder-seeded.Dockerfile bakes, so one image digest pins toolchain + dependency set).
+  29 | >>> # The image route has to land in /src first, and that is not cosmetic: a BuildKit cache mount
+  30 | >>> # SHADOWS whatever the image had at that path. Measured on 2026-09-28 — baking the seeds straight
+  31 | >>> # into /root/.cargo/{git,registry} produced `cp: cannot stat '/src/gitdb/.': No such file or
+  32 | >>> # directory`, because the guard below saw an empty fresh cache sitting on top of the baked tree.
+  33 | >>> # So the image seed is staged to /src and takes the identical code path as a context seed.
+  34 | >>> if [ ! -d /src/gitdb ] && [ -d /opt/prov-seed/gitdb ]; then
+  35 | >>>     mkdir -p /src/gitdb
+  36 | >>>     cp -a /opt/prov-seed/gitdb/. /src/gitdb/
+  37 | >>>     echo "STAGED-FROM-IMAGE gitdb"
+  38 | >>> fi
+  39 | >>> if [ ! -d /src/regcache ] && [ -d /opt/prov-seed/regcache ]; then
+  40 | >>>     mkdir -p /src/regcache
+  41 | >>>     cp -a /opt/prov-seed/regcache/. /src/regcache/
+  42 | >>>     echo "STAGED-FROM-IMAGE regcache"
+  43 | >>> fi
+  44 | >>> 
+  45 | >>> mkdir -p /root/.cargo/git/db
+  46 | >>> if [ ! -d /root/.cargo/git/db/logos-execution-zone-6bae42d7c9cadfe7 ]; then
+  47 | >>>     if [ -d /src/gitdb ]; then
+  48 | >>>         cp -a /src/gitdb/. /root/.cargo/git/db/
+  49 | >>>         du -sh /root/.cargo/git/db | sed 's/^/SEEDED /'
+  50 | >>>     else
+  51 | >>>         # Legal only in a vendored build (see VENDORED MODE below): the git dependency is
+  52 | >>>         # resolved from `vendor/` through source replacement, so an empty git cache is fine.
+  53 | >>>         echo "NO-GIT-SEED: relying on .cargo/config.toml source replacement"
+  54 | >>>     fi
+  55 | >>> fi
+  56 | >>> 
+  57 | >>> # SEALED MODE (opt-in: scripts/build_guest.sh with REGCACHE=<dir> puts a crates.io cache at
+  58 | >>> # /src/regcache). Measured reason it exists: with fresh BuildKit cache mounts and only the git
+  59 | >>> # DB seeded, `cargo build --locked` has to reach crates.io and dies here on
+  60 | >>> # `[28] Timeout was reached` — Cargo.lock + git DB are NOT a complete input set. The registry
+  61 | >>> # cache is a second build input, so ship it and forbid the network instead of hanging on it.
+  62 | >>> if [ -d /src/regcache ]; then
+  63 | >>>     mkdir -p /root/.cargo/registry
+  64 | >>>     if [ -z "$(ls -A /root/.cargo/registry 2>/dev/null || true)" ]; then
+  65 | >>>         cp -a /src/regcache/. /root/.cargo/registry/
+  66 | >>>         du -sh /root/.cargo/registry | sed 's/^/SEEDED-REGISTRY /'
+  67 | >>>     fi
+  68 | >>>     export CARGO_NET_OFFLINE=true
+  69 | >>>     echo "==> SEALED BUILD: registry from /src/regcache, cargo network disabled"
+  70 | >>> fi
+  71 | >>> 
+  72 | >>> # VENDORED MODE (opt-in: scripts/build_guest.sh with VENDOR=<dir> puts `cargo vendor` output at
+  73 | >>> # /src/vendor plus the source-replacement config at /src/.cargo/config.toml). This is the third
+  74 | >>> # and best answer to "what are the build inputs": the dependency *sources* become declared content
+  75 | >>> # of the input set, so neither cargo cache is an input and the pinned upstream image alone is
+  76 | >>> # enough. The unresolved question is byte-identity: vendored sources live at a different path than
+  77 | >>> # /root/.cargo/registry/src/..., so it is only safe to claim this builds the SAME program if the
+  78 | >>> # ImageID is re-measured. Measured here: the deployed ELF embeds no dependency source paths at all
+  79 | >>> # (strings shows only the toolchain's own /opt/actions-runner/... std paths and our
+  80 | >>> # src/bin/provenance.rs), which is the reason the experiment is expected to match — not proof.
+  81 | >>> if [ -f /src/.cargo/config.toml ] && [ -d /src/vendor ]; then
+  82 | >>>     export CARGO_NET_OFFLINE=true
+  83 | >>>     du -sh /src/vendor | sed 's/^/VENDORED /'
+  84 | >>>     du -sh /root/.cargo/git /root/.cargo/registry 2>/dev/null | sed 's/^/CACHES-STILL-CONSUMED-BY /'
+  85 | >>>     echo "==> VENDORED BUILD: sources from /src/vendor, cargo network disabled"
+  86 | >>> fi
+  87 | >>> 
+  88 | >>> target_triple="riscv32im-risc0-zkvm-elf"
+  89 | >>> unit_separator="$(printf '\037')"
+  90 | >>> guest_rustflags="-C${unit_separator}passes=lower-atomic${unit_separator}-C${unit_separator}link-arg=-Ttext=0x00200800${unit_separator}-C${unit_separator}link-arg=--fatal-warnings${unit_separator}-C${unit_separator}panic=abort${unit_separator}--cfg${unit_separator}getrandom_backend=\"custom\""
+  91 | >>> export CARGO_ENCODED_RUSTFLAGS="${guest_rustflags}"
+  92 | >>> 
+  93 | >>> echo "==> Building provenance guest"
+  94 | >>> cargo +risc0 build --release --locked --target "${target_triple}" --manifest-path methods/guest/Cargo.toml
+  95 | >>> 
+  96 | >>> mkdir -p /guest-output
+  97 | >>> cp "${CARGO_TARGET_DIR}/${target_triple}/release/provenance" /guest-output/provenance.elf
+  98 | >>> sha256sum /guest-output/provenance.elf
+  99 | >>> ls -la /guest-output
+ 100 | >>> EOF
+ 101 |     
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c set -eu\n\n# Two ways the offline seeds can arrive: in the build CONTEXT (/src/gitdb, /src/regcache — what\n# scripts/build_guest.sh stages) or in the BUILDER IMAGE (/opt/prov-seed/... — what\n# docker/builder-seeded.Dockerfile bakes, so one image digest pins toolchain + dependency set).\n# The image route has to land in /src first, and that is not cosmetic: a BuildKit cache mount\n# SHADOWS whatever the image had at that path. Measured on 2026-09-28 — baking the seeds straight\n# into /root/.cargo/{git,registry} produced `cp: cannot stat '/src/gitdb/.': No such file or\n# directory`, because the guard below saw an empty fresh cache sitting on top of the baked tree.\n# So the image seed is staged to /src and takes the identical code path as a context seed.\nif [ ! -d /src/gitdb ] && [ -d /opt/prov-seed/gitdb ]; then\n    mkdir -p /src/gitdb\n    cp -a /opt/prov-seed/gitdb/. /src/gitdb/\n    echo \"STAGED-FROM-IMAGE gitdb\"\nfi\nif [ ! -d /src/regcache ] && [ -d /opt/prov-seed/regcache ]; then\n    mkdir -p /src/regcache\n    cp -a /opt/prov-seed/regcache/. /src/regcache/\n    echo \"STAGED-FROM-IMAGE regcache\"\nfi\n\nmkdir -p /root/.cargo/git/db\nif [ ! -d /root/.cargo/git/db/logos-execution-zone-6bae42d7c9cadfe7 ]; then\n    if [ -d /src/gitdb ]; then\n        cp -a /src/gitdb/. /root/.cargo/git/db/\n        du -sh /root/.cargo/git/db | sed 's/^/SEEDED /'\n    else\n        # Legal only in a vendored build (see VENDORED MODE below): the git dependency is\n        # resolved from `vendor/` through source replacement, so an empty git cache is fine.\n        echo \"NO-GIT-SEED: relying on .cargo/config.toml source replacement\"\n    fi\nfi\n\n# SEALED MODE (opt-in: scripts/build_guest.sh with REGCACHE=<dir> puts a crates.io cache at\n# /src/regcache). Measured reason it exists: with fresh BuildKit cache mounts and only the git\n# DB seeded, `cargo build --locked` has to reach crates.io and dies here on\n# `[28] Timeout was reached` — Cargo.lock + git DB are NOT a complete input set. The registry\n# cache is a second build input, so ship it and forbid the network instead of hanging on it.\nif [ -d /src/regcache ]; then\n    mkdir -p /root/.cargo/registry\n    if [ -z \"$(ls -A /root/.cargo/registry 2>/dev/null || true)\" ]; then\n        cp -a /src/regcache/. /root/.cargo/registry/\n        du -sh /root/.cargo/registry | sed 's/^/SEEDED-REGISTRY /'\n    fi\n    export CARGO_NET_OFFLINE=true\n    echo \"==> SEALED BUILD: registry from /src/regcache, cargo network disabled\"\nfi\n\n# VENDORED MODE (opt-in: scripts/build_guest.sh with VENDOR=<dir> puts `cargo vendor` output at\n# /src/vendor plus the source-replacement config at /src/.cargo/config.toml). This is the third\n# and best answer to \"what are the build inputs\": the dependency *sources* become declared content\n# of the input set, so neither cargo cache is an input and the pinned upstream image alone is\n# enough. The unresolved question is byte-identity: vendored sources live at a different path than\n# /root/.cargo/registry/src/..., so it is only safe to claim this builds the SAME program if the\n# ImageID is re-measured. Measured here: the deployed ELF embeds no dependency source paths at all\n# (strings shows only the toolchain's own /opt/actions-runner/... std paths and our\n# src/bin/provenance.rs), which is the reason the experiment is expected to match — not proof.\nif [ -f /src/.cargo/config.toml ] && [ -d /src/vendor ]; then\n    export CARGO_NET_OFFLINE=true\n    du -sh /src/vendor | sed 's/^/VENDORED /'\n    du -sh /root/.cargo/git /root/.cargo/registry 2>/dev/null | sed 's/^/CACHES-STILL-CONSUMED-BY /'\n    echo \"==> VENDORED BUILD: sources from /src/vendor, cargo network disabled\"\nfi\n\ntarget_triple=\"riscv32im-risc0-zkvm-elf\"\nunit_separator=\"$(printf '\\037')\"\nguest_rustflags=\"-C${unit_separator}passes=lower-atomic${unit_separator}-C${unit_separator}link-arg=-Ttext=0x00200800${unit_separator}-C${unit_separator}link-arg=--fatal-warnings${unit_separator}-C${unit_separator}panic=abort${unit_separator}--cfg${unit_separator}getrandom_backend=\\\"custom\\\"\"\nexport CARGO_ENCODED_RUSTFLAGS=\"${guest_rustflags}\"\n\necho \"==> Building provenance guest\"\ncargo +risc0 build --release --locked --target \"${target_triple}\" --manifest-path methods/guest/Cargo.toml\n\nmkdir -p /guest-output\ncp \"${CARGO_TARGET_DIR}/${target_triple}/release/provenance\" /guest-output/provenance.elf\nsha256sum /guest-output/provenance.elf\nls -la /guest-output\n" did not complete successfully: exit code: 101

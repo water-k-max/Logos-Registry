@@ -1,0 +1,13 @@
+[package]
+name = "provenance_core"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+lee_core = { git = "https://github.com/logos-blockchain/logos-execution-zone.git", tag = "v0.2.4", features = ["host"] }
+spel-framework-macros = { git = "https://github.com/logos-co/spel.git", rev = "1ef0500f8fc8ce3ddf95523726ae159db83f744f", package = "spel-framework-macros" }
+serde = { version = "1.0", features = ["derive"] }
+borsh = { version = "1.5", features = ["derive"] }
+# Pin ruint (transitive via lee_core/alloy) below 1.18, which raised its MSRV
+# past the risc0 guest toolchain (rustc 1.88). Same pin as official guests.
+ruint = { version = "=1.17.0", default-features = false }

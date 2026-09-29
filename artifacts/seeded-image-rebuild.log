@@ -1,0 +1,13 @@
+==> staging /home/user/prov-builder-ctx (hardlinks)
+gitdb	184
+regcache	2370
+==> building provenance-builder-seeded:r0.1.88.0-provseed-bundle1
+==> measured image facts
+IMAGE        provenance-builder-seeded:r0.1.88.0-provseed-bundle1
+ALIAS        risczero/risc0-guest-builder:r0.1.88.0-provseed-bundle1  (use as BASE_TAG for docker/build-guest.Dockerfile)
+IMAGEID      sha256:b85469cd1801fe388ae13df8f579773e7e1821f07edf25486b716d28285a8aa5
+SIZE_BYTES   2198176405
+BASE         sha256:3e12f71bacd27527a61dea96fa0e53e468c99aa261d3a1019b593f6dbd943eb3
+OFFLINE_ENV  "CARGO_NET_OFFLINE=true"]
+
+Next: CACHE_ID=fresh-1790692336 SEEDED=1 BASE_TAG=r0.1.88.0-provseed-bundle1 scripts/build_guest.sh

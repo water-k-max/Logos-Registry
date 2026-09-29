@@ -1,0 +1,25 @@
+[package]
+name = "provenance-sdk"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+
+[dependencies]
+provenance_core = { path = "../provenance_core" }
+# Addresses and account/program types come from the exact upstream revs the guest is
+# built against (same specs as `tools/lezreg`, so both tools share one resolution).
+# A hand-rolled `compute_pda` would keep returning well-formed addresses after a seed
+# layout change on chain — pointing at nothing, silently.
+lee_core = { git = "https://github.com/logos-blockchain/logos-execution-zone.git", tag = "v0.2.4" }
+spel-framework-core = { git = "https://github.com/logos-co/spel.git", rev = "1ef0500f8fc8ce3ddf95523726ae159db83f744f" }
+borsh = { version = "1.5", features = ["derive"] }
+base64 = "0.22"
+cid = { version = "0.11", features = ["alloc"] }
+ed25519-dalek = { version = "2.1", features = ["std"] }
+hex = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha2 = "0.10"
+thiserror = "2"
+ureq = "2.10"

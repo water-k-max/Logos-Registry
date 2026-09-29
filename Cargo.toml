@@ -1,0 +1,17 @@
+[workspace]
+members = [
+    "provenance_core",
+    "provenance_ffi",
+    "methods",
+    "examples",
+    "tools/risc0-packager",
+    "tools/lezreg",
+]
+exclude = [
+    "methods/guest",
+    # host-only tool with its own lock: putting it in `members` would let cargo feature
+    # unification reach the guest graph, and §0.9 measured that a manifest-only change in a
+    # guest-linked crate moves the deployed ImageID.
+    "tools/lezbuild",
+]
+resolver = "2"
