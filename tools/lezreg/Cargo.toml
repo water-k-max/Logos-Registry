@@ -1,0 +1,27 @@
+[package]
+name = "lezreg"
+version = "0.1.0"
+edition = "2021"
+description = "Provenance registry host tool: PDA derivation, instruction ABI, live submission"
+
+[[bin]]
+name = "lezreg"
+path = "src/main.rs"
+
+[dependencies]
+nssa = { git = "https://github.com/logos-blockchain/logos-execution-zone.git", tag = "v0.2.4", package = "lee" }
+nssa_core = { git = "https://github.com/logos-blockchain/logos-execution-zone.git", tag = "v0.2.4", package = "lee_core" }
+common = { git = "https://github.com/logos-blockchain/logos-execution-zone.git", tag = "v0.2.4" }
+sequencer_service_rpc = { git = "https://github.com/logos-blockchain/logos-execution-zone.git", tag = "v0.2.4", features = ["client"] }
+wallet = { git = "https://github.com/logos-blockchain/logos-execution-zone.git", tag = "v0.2.4" }
+clock_core = { git = "https://github.com/logos-blockchain/logos-execution-zone.git", tag = "v0.2.4" }
+spel-framework-core = { git = "https://github.com/logos-co/spel.git", rev = "1ef0500f8fc8ce3ddf95523726ae159db83f744f" }
+# Account schema only. The instruction ABI mirror lives in `src/instruction.rs`:
+# a host-side enum inside the guest-linked crate shifts the guest ELF even when
+# it is `#[cfg(feature = "host")]`-gated (measured, IMPLEMENTATION_PLAN §0.9),
+# which would make the deployed ImageID hostage to host tooling edits.
+provenance_core = { path = "../../provenance_core" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+hex = "0.4"

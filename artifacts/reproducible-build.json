@@ -1,0 +1,491 @@
+{
+  "build": {
+    "command": [
+      "cargo",
+      "+risc0",
+      "build",
+      "--release",
+      "--locked",
+      "--target",
+      "riscv32im-risc0-zkvm-elf",
+      "--manifest-path",
+      "methods/guest/Cargo.toml"
+    ],
+    "container_cache_id": "provenance-risc0-guest-b2",
+    "env": {
+      "CARGO_HOME": "/root/.cargo",
+      "CARGO_TARGET_DIR": "/src/target/prov-guest",
+      "CC_riscv32im_risc0_zkvm_elf": "/root/.risc0/cpp/bin/riscv32-unknown-elf-gcc",
+      "CFLAGS_riscv32im_risc0_zkvm_elf": "-march=rv32im -nostdlib",
+      "RISC0_FEATURE_bigint2": ""
+    },
+    "guest_manifest": "methods/guest/Cargo.toml",
+    "guest_rustflags_recipe": "-C${unit_separator}passes=lower-atomic${unit_separator}-C${unit_separator}link-arg=-Ttext=0x00200800${unit_separator}-C${unit_separator}link-arg=--fatal-warnings${unit_separator}-C${unit_separator}panic=abort${unit_separator}--cfg${unit_separator}getrandom_backend=\"custom\"",
+    "image": "risczero/risc0-guest-builder:r0.1.88.0",
+    "image_digest": "risczero/risc0-guest-builder@sha256:3e12f71bacd27527a61dea96fa0e53e468c99aa261d3a1019b593f6dbd943eb3",
+    "offline_seed": {
+      "caches_baked_in_builder_image": [
+        {
+          "in_builder_image": "/opt/prov-seed/gitdb",
+          "staged_to": "/src/gitdb"
+        },
+        {
+          "in_builder_image": "/opt/prov-seed/regcache",
+          "staged_to": "/src/regcache"
+        }
+      ],
+      "caches_copied_from_context": [
+        {
+          "context_path": "gitdb",
+          "in_container": "/root/.cargo/git/db"
+        },
+        {
+          "context_path": "regcache",
+          "in_container": "/root/.cargo/registry"
+        }
+      ],
+      "host_sources": {
+        "gitdb": "/home/user/lez-programs/gitdb",
+        "regcache": null
+      }
+    },
+    "recipe_variables": [
+      {
+        "default": "r0.1.88.0",
+        "name": "RISC0_DOCKER_CONTAINER_TAG"
+      },
+      {
+        "default": "provenance-risc0-guest",
+        "name": "PROV_BUILD_CACHE_ID"
+      },
+      {
+        "default": "true",
+        "name": "CARGO_NET_OFFLINE"
+      },
+      {
+        "default": "true",
+        "name": "CARGO_NET_OFFLINE"
+      },
+      {
+        "default": "riscv32im-risc0-zkvm-elf",
+        "name": "target_triple"
+      },
+      {
+        "default": "$(printf '\\037')",
+        "name": "unit_separator"
+      },
+      {
+        "default": "-C${unit_separator}passes=lower-atomic${unit_separator}-C${unit_separator}link-arg=-Ttext=0x00200800${unit_separator}-C${unit_separator}link-arg=--fatal-warnings${unit_separator}-C${unit_separator}panic=abort${unit_separator}--cfg${unit_separator}getrandom_backend=\"custom\"",
+        "name": "guest_rustflags"
+      },
+      {
+        "default": "${guest_rustflags}",
+        "name": "CARGO_ENCODED_RUSTFLAGS"
+      }
+    ],
+    "risc0_toolchain": "risczero/risc0-guest-builder:r0.1.88.0",
+    "rust_toolchain": "rustc 1.88.0-dev (de85b1d3d 2025-06-26) / release: 1.88.0-dev",
+    "workdir": "/src"
+  },
+  "expect": {
+    "elf_sha256": "a1a0fdc88a0e06b82d2e36abc0f3b192fdf8be2914823a8784c5b291e1f56089",
+    "elf_size_bytes": 506164,
+    "guest_artifact": "${CARGO_TARGET_DIR}/${target_triple}/release/provenance",
+    "image_id": "7b4040d30bc2354f5cfddedaea1a8a088ae6876f375220884485ea7d2e7b0bd6",
+    "image_id_source": "chain: program-owner account limbs of the deployed image at block 28679, recomputed locally with risc0-packager from artifacts/provenance.elf"
+  },
+  "generated_by": "lezbuild 0.1.0",
+  "guest_graph": {
+    "crate_manifests": [
+      {
+        "crate": "provenance-guest",
+        "manifest_path": "methods/guest/Cargo.toml",
+        "manifest_sha256": "3b256bad73ba37d5a84339198f03925c274e97369d5655a54bfd6ea964c3346c",
+        "src_file_count": 1,
+        "src_files": [
+          {
+            "path": "src/bin/provenance.rs",
+            "sha256": "0f83377a56e73ad4a590aab683d6dccd3c52570ca09d7a9ae146970221280986"
+          }
+        ],
+        "src_tree_sha256": "c930496bac531e6bffe928666a0b3b60f32246fde0a74416058d8c3d91f6ca61"
+      },
+      {
+        "crate": "provenance_core",
+        "manifest_path": "provenance_core/Cargo.toml",
+        "manifest_sha256": "80a9dfa30058a260643887cf42a5126b0089368ce74e1a3aee8bd6fe117a3015",
+        "src_file_count": 1,
+        "src_files": [
+          {
+            "path": "src/lib.rs",
+            "sha256": "ccf431bd4da84e5c8509e21a25a524798bc70482e35f620ddd395e8219f25b36"
+          }
+        ],
+        "src_tree_sha256": "d7cb9c81ab644eed91d669f279fdbe56a81adee8a1c017d0f829db1abc9d571c"
+      }
+    ],
+    "crate_manifests_sha256": "9583cb1432ac0da4ed156ba6a4f667480c81a2e3e643b4dbd9e36309c8564857",
+    "dep_set_sha256": "a809d64904f1d63eea68665ae3471cc0ff7ec29259243703464900ad26ded3fb",
+    "external_crate_count": 821,
+    "local_crate_count": 2,
+    "lockfile_sha256": "7e3cb35ee4abec2f6c0bee75731fa264b7da335dd9f7059b1b42acf79a84bab2"
+  },
+  "schema": 1,
+  "source": {
+    "bundle_cid": null,
+    "commit": "921c6fc27842d3c7eec15dc505f8cd1a2658cc88",
+    "file_count": 87,
+    "files": [
+      {
+        "path": ".gitattributes",
+        "sha256": "bcebf9bbac340aaab4f1a7022f6f996a890da02635ba5798a17743462186dadb"
+      },
+      {
+        "path": ".gitignore",
+        "sha256": "1fb60d4eadc6190837403aefa0a93315630ef7b810bf4d974dc8e883594a1642"
+      },
+      {
+        "path": "Cargo.lock",
+        "sha256": "7e3cb35ee4abec2f6c0bee75731fa264b7da335dd9f7059b1b42acf79a84bab2"
+      },
+      {
+        "path": "Cargo.toml",
+        "sha256": "6a26f5fdcc45192097577c69bae3d778f5ca8feacf48cae6c8c7556fe6ce9305"
+      },
+      {
+        "path": "Makefile",
+        "sha256": "0abf07ede4985477b73fff12495816514a8689229aef04f70c13c9876a45eefb"
+      },
+      {
+        "path": "README.md",
+        "sha256": "88ff50b386cc5f83d6c59a421a04366cdfcba410f03f9a829e759e715f94b34e"
+      },
+      {
+        "path": "docker/build-guest.Dockerfile",
+        "sha256": "2681608d82ba9de988a3505ce15579b2338449ee88174a4c4739572ef3e168c4"
+      },
+      {
+        "path": "docker/builder-seeded.Dockerfile",
+        "sha256": "220e2941a14629478ccea7fd1f838bdedf5f67dd816c1fd745c3f59b675f4e85"
+      },
+      {
+        "path": "docker/experiment-cargo-home.Dockerfile",
+        "sha256": "1672b44daaf244ee5929e95b4ca5f202d11c37ece14ab2ff019b3d8e04fbdd38"
+      },
+      {
+        "path": "docker/vendor-cargo-config.toml",
+        "sha256": "88df3a6d2306368988947edd67827a58aebd83906e29f9ca936404c8c0fca25d"
+      },
+      {
+        "path": "examples/Cargo.toml",
+        "sha256": "64f23731d6ae479c1b0fa1cefc17490382b8a38f6a140351a40a2eebb7d3e445"
+      },
+      {
+        "path": "examples/src/bin/generate_idl.rs",
+        "sha256": "4587ed72bc981aa83000b1d781ccf2d0d4659ff3f24d65ad3c9d28c6c3bdc0c9"
+      },
+      {
+        "path": "examples/src/bin/provenance_cli.rs",
+        "sha256": "9a660b9b2d4723b0ecc3a277b35fc1b4fbdb4e74447bbfc644c1fefc11c8f234"
+      },
+      {
+        "path": "methods/Cargo.toml",
+        "sha256": "cd44a17c1dc54180da943c31f9c29af11c903b19d4060b4f843e62561c467f54"
+      },
+      {
+        "path": "methods/build.rs",
+        "sha256": "d3d0aa4add6d6294b4cd9199c9b7162187b7383980cda986051fe94497334f75"
+      },
+      {
+        "path": "methods/guest/Cargo.lock",
+        "sha256": "e1cf86544cc07e4eb24f5ae6f8b783d87e06df39431318efa695064113738b0b"
+      },
+      {
+        "path": "methods/guest/Cargo.toml",
+        "sha256": "3b256bad73ba37d5a84339198f03925c274e97369d5655a54bfd6ea964c3346c"
+      },
+      {
+        "path": "methods/guest/src/bin/provenance.rs",
+        "sha256": "0f83377a56e73ad4a590aab683d6dccd3c52570ca09d7a9ae146970221280986"
+      },
+      {
+        "path": "methods/src/lib.rs",
+        "sha256": "902d56d952004dd42e65c148a4b537710f869054556528b25ed3e67d050bb255"
+      },
+      {
+        "path": "prov-idl.json",
+        "sha256": "8588152f1b71904b31f27a45a009f8677188bbde6df41442e6a939a9b8fa868e"
+      },
+      {
+        "path": "provenance-idl.json",
+        "sha256": "ef6635b714c70b0f7c08e6649fbb60b04b82317519acfc701c372f2a712d382f"
+      },
+      {
+        "path": "provenance_core/Cargo.toml",
+        "sha256": "80a9dfa30058a260643887cf42a5126b0089368ce74e1a3aee8bd6fe117a3015"
+      },
+      {
+        "path": "provenance_core/src/lib.rs",
+        "sha256": "ccf431bd4da84e5c8509e21a25a524798bc70482e35f620ddd395e8219f25b36"
+      },
+      {
+        "path": "provenance_ffi/Cargo.toml",
+        "sha256": "d2df4b6dd5b028105a2d6e64d57a01f8893cb7bc3b349ee5c14b594c9d9a1577"
+      },
+      {
+        "path": "provenance_ffi/generated/provenance_ffi.rs",
+        "sha256": "d900d44334f2b78e7280ca2037efbc35f4dff31a989105b5f450d0cb574901f6"
+      },
+      {
+        "path": "provenance_ffi/src/lib.rs",
+        "sha256": "e8200865daea9b5ff2a12fcf18f4aa63bce209e5451952a90d93b07cb6487627"
+      },
+      {
+        "path": "scripts/build_guest.sh",
+        "sha256": "e18cb9bc0feb701002c99ff0a38384ddc925e372536c1a7ab9b3070a1b1893f2"
+      },
+      {
+        "path": "scripts/build_seeded_builder.sh",
+        "sha256": "12287f7a2b6f185ee0cf714147f9b03218d95340a2dfa6372435ece83f24b260"
+      },
+      {
+        "path": "scripts/cargo_home_analysis.sh",
+        "sha256": "d11c4a68f15a3b1d36bb8c53f35beb64032f85f9f47cf3da75e544093a70dc26"
+      },
+      {
+        "path": "scripts/cargo_home_bytediff.sh",
+        "sha256": "2696186b0ca536d0d11ffc33334d18a7a5b25df6f97090de3b726ae1dfe9a985"
+      },
+      {
+        "path": "scripts/cargo_home_closure.sh",
+        "sha256": "884fb74fd45e8aff0edafb38b2feb174d1194ef96c6f142271b89a9401287d4f"
+      },
+      {
+        "path": "scripts/cargo_home_experiment.sh",
+        "sha256": "a1f73f7f115044551f7d9b207ad75de424cf91385c874017d21cb93e1d8366c4"
+      },
+      {
+        "path": "scripts/cargo_home_sections.sh",
+        "sha256": "23ba58da11d70301b112acbcd17fa28b87b974d301105774bb67f71422fe0024"
+      },
+      {
+        "path": "scripts/cargo_home_strings_by_section.sh",
+        "sha256": "8acd21b00291a97e4de64b2f1f8396c1bfb7ff4f2b7767a14c69403592a05566"
+      },
+      {
+        "path": "scripts/cargo_home_symboltab.sh",
+        "sha256": "4050559dba9d24e7224835a201a011fb27337bff1d9f77e727b8f569cb442dd4"
+      },
+      {
+        "path": "scripts/cargo_home_textdiff.sh",
+        "sha256": "7d54755189d72b6b629ab17569b09b012ef79252b7ed3dbf86addaada508862f"
+      },
+      {
+        "path": "scripts/check_drift_split.sh",
+        "sha256": "908b7e076cd6fbc41b900273e96cfafb3f640858ecfe45a027991901c63c915a"
+      },
+      {
+        "path": "scripts/check_image_seed.sh",
+        "sha256": "a9d3e340a224602f5d960a7b91de7524ccabe7c25233d4c800884d73791744d2"
+      },
+      {
+        "path": "scripts/check_outside_exits.sh",
+        "sha256": "3c6af4f6d304d50ccbc0846e1ed35e928f437372308bc7f7fb5b4fb3d6eef0ac"
+      },
+      {
+        "path": "scripts/check_strict_exit.sh",
+        "sha256": "bd2910c6ca23e799de0c115b4d1a21d3d0088408d41913932e6ddbd6b96e2b55"
+      },
+      {
+        "path": "scripts/check_strict_via_cargo.sh",
+        "sha256": "ab97a01f749f1f1f5f320b52e884f585c71ac44bab0434d13fcbdd119899035b"
+      },
+      {
+        "path": "scripts/dryrun_namespace.sh",
+        "sha256": "56cff1a51c74b853fa2c7d4ead1b32befb31cec4fb72d5868099dadde7f45bed"
+      },
+      {
+        "path": "scripts/envcheck_buildlog.sh",
+        "sha256": "f6350e49460f44a782ac30376ec703e3dee1da26d51dd8719410a7af5cdac56b"
+      },
+      {
+        "path": "scripts/envcheck_report.sh",
+        "sha256": "a421c5971f3677bf47a6e1ebed9f01739910d81f5174833f320c3ab13ff76d01"
+      },
+      {
+        "path": "scripts/evidence_pda_owner.sh",
+        "sha256": "7fd63bdf16bb7028ecb67fad3d38bfad56d71f7b4d97dfc74fc59117655bb366"
+      },
+      {
+        "path": "scripts/evidence_pda_rule.sh",
+        "sha256": "41c848a7d82aa31de462150656bd0768d932d8d412f4090fad0ee52955087898"
+      },
+      {
+        "path": "scripts/evidence_pda_runtime.sh",
+        "sha256": "74edbdce6e4a51798af2730b843eedf321853b6eac86929baf9c9651f417c726"
+      },
+      {
+        "path": "scripts/image_only_reproduction.sh",
+        "sha256": "41ee6abe6f3abfdcf73c944bd297b83eaa3bda0f34ec47f16ab4c8badc7aa551"
+      },
+      {
+        "path": "scripts/inspect_seeds.sh",
+        "sha256": "bdb7b8ee992254fe6d5bc6fcac9d3e8137370fe446badc2ba9946f2a90e05322"
+      },
+      {
+        "path": "scripts/install_lgx.py",
+        "sha256": "27096e1fd40afb5cd30194598d9b5f77d0760cbe0adc15fe9c8c786ce01b6f40"
+      },
+      {
+        "path": "scripts/m_b_evidence.sh",
+        "sha256": "1a95cc91f8a29e8ba2183cd39ab995748260a56ed03fb20a2fea8b398a14abef"
+      },
+      {
+        "path": "scripts/patch_lgx_manifest.py",
+        "sha256": "d0848cc0f0030d9fd7d7606d62fbf3b16219582db214062e8ac227945a9cc1c0"
+      },
+      {
+        "path": "scripts/poll_manifest.sh",
+        "sha256": "1bee78f28b46a8980915c539c5c939b26e6cfedfa95e648e39ede4b96ec4aff0"
+      },
+      {
+        "path": "scripts/project_size.sh",
+        "sha256": "b2d51e19abdd9beb5c3ce5e58962b31f3a6f9298e38b536a00cf3530a7139c37"
+      },
+      {
+        "path": "scripts/pull_deps_reproduction.sh",
+        "sha256": "e903eb4bd3a1f6681e3620f083d608eef1461472feb7f2889495c8df90710755"
+      },
+      {
+        "path": "scripts/reclaim_preflight.sh",
+        "sha256": "20ad5d628ede07bd2d5444779c871f29a55462b9a3f85834cff24b49b42085ee"
+      },
+      {
+        "path": "scripts/rpc_cadence.sh",
+        "sha256": "49ee40723f228c8218a6e6009f4f2b6015361ddfb7f1e749b28af25d6792f46b"
+      },
+      {
+        "path": "scripts/rpc_probe.sh",
+        "sha256": "2bc6ea671a19e52bb64b94314d34558deb4161a6e0e756b9031fbc895997cbda"
+      },
+      {
+        "path": "scripts/run_envcheck.sh",
+        "sha256": "23a183b376656d653b186c844bb552debd669a11bb5fc474aff17eb502dcceef"
+      },
+      {
+        "path": "scripts/run_example.sh",
+        "sha256": "4c33f6f267a5504f17b650a4b4c81eaf1e951fdfc106e3c1058954d7c8a080f7"
+      },
+      {
+        "path": "scripts/run_postreclaim.sh",
+        "sha256": "fa685fd1b4616c03a951ae97a16e30264aa7bbf5daa0748332ea65e5a1cc9bd0"
+      },
+      {
+        "path": "scripts/vendor_diff_and_seeds.sh",
+        "sha256": "8c0f459c50ea1f227ee680892712e16689e7ab20350e8d2ff1a189abe3839577"
+      },
+      {
+        "path": "scripts/vendor_reproduction.sh",
+        "sha256": "6bde5eea8b6b43ca20d401455d1326b265e42780afbc08c97cee03c4ce2f4fcc"
+      },
+      {
+        "path": "scripts/verify_from_the_outside.sh",
+        "sha256": "6cca738977928b24bd2d2d5612dd7a4342f19219e37efb1613f463d00e6aa1c9"
+      },
+      {
+        "path": "sdk/Cargo.lock",
+        "sha256": "d6cfe8b0add6bd8333f475cc4408960a70a1d5223b0efed0475ebe3e2adec5fb"
+      },
+      {
+        "path": "sdk/Cargo.toml",
+        "sha256": "f387e45dbaef86774091a085dc03716d7383caa9747a9af0c1cc2f34206e40e0"
+      },
+      {
+        "path": "sdk/examples/explorer-resolve.rs",
+        "sha256": "981d3b0ddc0f4e97a2ff648bd0cfd7f6d837bb44cb4b435b43b3e1efde4693bc"
+      },
+      {
+        "path": "sdk/src/chain.rs",
+        "sha256": "05251e3138a750e5c92502d4b137077c6360020fbf3a9694e4311314d6781620"
+      },
+      {
+        "path": "sdk/src/cid.rs",
+        "sha256": "21feb3f1bcaeca7e80cec777386df19cf63720f0c229938575df12e7aab99b19"
+      },
+      {
+        "path": "sdk/src/lib.rs",
+        "sha256": "e4c25490459a6ce14ef8571771d17e550a957e98adbd7bc722740878cd931904"
+      },
+      {
+        "path": "sdk/src/storage.rs",
+        "sha256": "7be5513d677f62d9f778671facec0b4572c3ac94897b05d7bf188c62109ddd96"
+      },
+      {
+        "path": "sdk/src/verify.rs",
+        "sha256": "0f8a2ebe9ad4cdf9d5962452ef9721811f0dffd6dffad2fc83479c8547191057"
+      },
+      {
+        "path": "sdk/tests/fixtures/live-entry-395.bin",
+        "sha256": "874aeba96fcdb9f8caf66a7d851835999cd9989ee25278fe5876bf396b5fb968"
+      },
+      {
+        "path": "sdk/tests/fixtures/live-get-account.json",
+        "sha256": "297034031d1e354fbf058e9884b5599eca2d56d6285f567ee009e7fcdac2282d"
+      },
+      {
+        "path": "spel.toml",
+        "sha256": "16adca067f065358f3add1af2316332d2899c24862ddfd2d238c9e45206626ae"
+      },
+      {
+        "path": "tools/lezbuild/Cargo.lock",
+        "sha256": "63720095bef1526039a09119e28827273d5bb91cc6d31761d2536db34cbcac0f"
+      },
+      {
+        "path": "tools/lezbuild/Cargo.toml",
+        "sha256": "b7b00064411629b202792a61ecc483d80d008ae4c4cc777236d97e17c2aff76c"
+      },
+      {
+        "path": "tools/lezbuild/src/hash.rs",
+        "sha256": "7033f4e8a79842b72433b8c9e71fdf5d59573490f452b39c6ddf572ae99145cb"
+      },
+      {
+        "path": "tools/lezbuild/src/main.rs",
+        "sha256": "5417c1f7956f51ca6ad9ce73efe782f78c5d772970fd3d1e0db73a89bb76032c"
+      },
+      {
+        "path": "tools/lezbuild/src/manifest.rs",
+        "sha256": "9dea6c4947d5b57dcba61ec31cff8be43fe524273e9c5a92e81e5e658c3ac77e"
+      },
+      {
+        "path": "tools/lezbuild/src/verify.rs",
+        "sha256": "0102c4cd331e32c8cc5f9195dcd52c5454465199afafc65d35be72f1b3fb21b4"
+      },
+      {
+        "path": "tools/lezreg/Cargo.toml",
+        "sha256": "ab31a2ef605936938e3f92c551ba60325d952b8e4f96ca9f58c9a2f7dd1ad279"
+      },
+      {
+        "path": "tools/lezreg/src/instruction.rs",
+        "sha256": "4825a5f70814833e575184c7d1e5d7a47370ab17af1a6aba653b4d0b76a81051"
+      },
+      {
+        "path": "tools/lezreg/src/main.rs",
+        "sha256": "2dc12d01901d9803a8f65f3640ddbab13c19cba157b141683e7e7ebce3385f34"
+      },
+      {
+        "path": "tools/lezreg/tests/cli_errors.rs",
+        "sha256": "f7bbb09b1c786d678240fccaff0c292111a20f753135f8043e7af639137c9280"
+      },
+      {
+        "path": "tools/risc0-packager/Cargo.toml",
+        "sha256": "a12b4a366a9948ad5ca54d59e750e3bf75b292b6f8c385525e6a1459354ff9fb"
+      },
+      {
+        "path": "tools/risc0-packager/src/main.rs",
+        "sha256": "f0b8ca5b4cc125a0d9a8d89f60e1d60c1e860f65a726c7c3475b2dcbf5c6dde9"
+      }
+    ],
+    "repo_url": "https://github.com/water-k-max/Logos-Registry",
+    "tree_sha256": "a6089c12b8d88e76482aa624e59c875cf844451c8380e202b87e606167cbe019"
+  }
+}

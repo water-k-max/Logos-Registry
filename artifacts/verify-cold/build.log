@@ -1,0 +1,96 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from build-guest.Dockerfile
+#1 transferring dockerfile: 2.29kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/risczero/risc0-guest-builder:r0.1.88.0
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context:
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [build 1/4] FROM docker.io/risczero/risc0-guest-builder:r0.1.88.0@sha256:3e12f71bacd27527a61dea96fa0e53e468c99aa261d3a1019b593f6dbd943eb3
+#4 resolve docker.io/risczero/risc0-guest-builder:r0.1.88.0@sha256:3e12f71bacd27527a61dea96fa0e53e468c99aa261d3a1019b593f6dbd943eb3 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 407.47MB 3.1s done
+#5 DONE 4.0s
+
+#6 [build 2/4] WORKDIR /src
+#6 CACHED
+
+#7 [build 3/4] COPY . .
+#7 CACHED
+
+#8 [build 4/4] RUN --mount=type=cache,id=prov-cold-1790630327-cargo-git,sharing=locked,target=/root/.cargo/git     --mount=type=cache,id=prov-cold-1790630327-cargo-registry,sharing=locked,target=/root/.cargo/registry     --mount=type=cache,id=prov-cold-1790630327-target,sharing=locked,target=/src/target/prov-guest <<'EOF' (set -eu...)
+#8 1.962 SEEDED 389M	/root/.cargo/git/db
+#8 1.964 ==> Building provenance guest
+#8 2.870     Updating crates.io index
+#8 81.58 warning: spurious network error (3 tries remaining): [28] Timeout was reached (Operation too slow. Less than 10 bytes/sec transferred the last 30 seconds)
+#8 82.58 warning: spurious network error (3 tries remaining): [28] Timeout was reached (Operation too slow. Less than 10 bytes/sec transferred the last 30 seconds)
+#8 82.58 warning: spurious network error (3 tries remaining): [28] Timeout was reached (Operation too slow. Less than 10 bytes/sec transferred the last 30 seconds)
+#8 113.3 warning: spurious network error (2 tries remaining): [28] Timeout was reached (Operation too slow. Less than 10 bytes/sec transferred the last 30 seconds)
+#8 114.3 warning: spurious network error (2 tries remaining): [28] Timeout was reached (Operation too slow. Less than 10 bytes/sec transferred the last 30 seconds)
+#8 115.3 warning: spurious network error (2 tries remaining): [28] Timeout was reached (Operation too slow. Less than 10 bytes/sec transferred the last 30 seconds)
+#8 148.0 warning: spurious network error (1 tries remaining): [28] Timeout was reached (Operation too slow. Less than 10 bytes/sec transferred the last 30 seconds)
+#8 150.0 warning: spurious network error (1 tries remaining): [28] Timeout was reached (Operation too slow. Less than 10 bytes/sec transferred the last 30 seconds)
+#8 151.0 warning: spurious network error (1 tries remaining): [28] Timeout was reached (Operation too slow. Less than 10 bytes/sec transferred the last 30 seconds)
+#8 189.9 error: failed to get `risc0-zkvm` as a dependency of package `lee_core v0.1.0 (https://github.com/logos-blockchain/logos-execution-zone.git?tag=v0.2.4#47eba256)`
+#8 189.9     ... which satisfies git dependency `nssa_core` (locked to 0.1.0) of package `provenance-guest v0.1.0 (/src/methods/guest)`
+#8 189.9 
+#8 189.9 Caused by:
+#8 189.9   download of ri/sc/risc0-zkvm failed
+#8 189.9 
+#8 189.9 Caused by:
+#8 189.9   failed to download from `https://index.crates.io/ri/sc/risc0-zkvm`
+#8 189.9 
+#8 189.9 Caused by:
+#8 189.9   [28] Timeout was reached (Operation too slow. Less than 10 bytes/sec transferred the last 30 seconds)
+#8 ERROR: process "/bin/sh -c set -eu\n\nmkdir -p /root/.cargo/git/db\nif [ ! -d /root/.cargo/git/db/logos-execution-zone-6bae42d7c9cadfe7 ]; then\n    cp -a /src/gitdb/. /root/.cargo/git/db/\n    du -sh /root/.cargo/git/db | sed 's/^/SEEDED /'\nfi\n\ntarget_triple=\"riscv32im-risc0-zkvm-elf\"\nunit_separator=\"$(printf '\\037')\"\nguest_rustflags=\"-C${unit_separator}passes=lower-atomic${unit_separator}-C${unit_separator}link-arg=-Ttext=0x00200800${unit_separator}-C${unit_separator}link-arg=--fatal-warnings${unit_separator}-C${unit_separator}panic=abort${unit_separator}--cfg${unit_separator}getrandom_backend=\\\"custom\\\"\"\nexport CARGO_ENCODED_RUSTFLAGS=\"${guest_rustflags}\"\n\necho \"==> Building provenance guest\"\ncargo +risc0 build --release --locked --target \"${target_triple}\" --manifest-path methods/guest/Cargo.toml\n\nmkdir -p /guest-output\ncp \"${CARGO_TARGET_DIR}/${target_triple}/release/provenance\" /guest-output/provenance.elf\nsha256sum /guest-output/provenance.elf\nls -la /guest-output\n" did not complete successfully: exit code: 101
+------
+ > [build 4/4] RUN --mount=type=cache,id=prov-cold-1790630327-cargo-git,sharing=locked,target=/root/.cargo/git     --mount=type=cache,id=prov-cold-1790630327-cargo-registry,sharing=locked,target=/root/.cargo/registry     --mount=type=cache,id=prov-cold-1790630327-target,sharing=locked,target=/src/target/prov-guest <<'EOF' (set -eu...):
+189.9     ... which satisfies git dependency `nssa_core` (locked to 0.1.0) of package `provenance-guest v0.1.0 (/src/methods/guest)`
+189.9 
+189.9 Caused by:
+189.9   download of ri/sc/risc0-zkvm failed
+189.9 
+189.9 Caused by:
+189.9   failed to download from `https://index.crates.io/ri/sc/risc0-zkvm`
+189.9 
+189.9 Caused by:
+189.9   [28] Timeout was reached (Operation too slow. Less than 10 bytes/sec transferred the last 30 seconds)
+------
+build-guest.Dockerfile:21
+--------------------
+  20 |     
+  21 | >>> RUN --mount=type=cache,id=${PROV_BUILD_CACHE_ID}-cargo-git,sharing=locked,target=/root/.cargo/git \
+  22 | >>>     --mount=type=cache,id=${PROV_BUILD_CACHE_ID}-cargo-registry,sharing=locked,target=/root/.cargo/registry \
+  23 | >>>     --mount=type=cache,id=${PROV_BUILD_CACHE_ID}-target,sharing=locked,target=/src/target/prov-guest <<'EOF'
+  24 | >>> set -eu
+  25 | >>> 
+  26 | >>> mkdir -p /root/.cargo/git/db
+  27 | >>> if [ ! -d /root/.cargo/git/db/logos-execution-zone-6bae42d7c9cadfe7 ]; then
+  28 | >>>     cp -a /src/gitdb/. /root/.cargo/git/db/
+  29 | >>>     du -sh /root/.cargo/git/db | sed 's/^/SEEDED /'
+  30 | >>> fi
+  31 | >>> 
+  32 | >>> target_triple="riscv32im-risc0-zkvm-elf"
+  33 | >>> unit_separator="$(printf '\037')"
+  34 | >>> guest_rustflags="-C${unit_separator}passes=lower-atomic${unit_separator}-C${unit_separator}link-arg=-Ttext=0x00200800${unit_separator}-C${unit_separator}link-arg=--fatal-warnings${unit_separator}-C${unit_separator}panic=abort${unit_separator}--cfg${unit_separator}getrandom_backend=\"custom\""
+  35 | >>> export CARGO_ENCODED_RUSTFLAGS="${guest_rustflags}"
+  36 | >>> 
+  37 | >>> echo "==> Building provenance guest"
+  38 | >>> cargo +risc0 build --release --locked --target "${target_triple}" --manifest-path methods/guest/Cargo.toml
+  39 | >>> 
+  40 | >>> mkdir -p /guest-output
+  41 | >>> cp "${CARGO_TARGET_DIR}/${target_triple}/release/provenance" /guest-output/provenance.elf
+  42 | >>> sha256sum /guest-output/provenance.elf
+  43 | >>> ls -la /guest-output
+  44 | >>> EOF
+  45 |     
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c set -eu\n\nmkdir -p /root/.cargo/git/db\nif [ ! -d /root/.cargo/git/db/logos-execution-zone-6bae42d7c9cadfe7 ]; then\n    cp -a /src/gitdb/. /root/.cargo/git/db/\n    du -sh /root/.cargo/git/db | sed 's/^/SEEDED /'\nfi\n\ntarget_triple=\"riscv32im-risc0-zkvm-elf\"\nunit_separator=\"$(printf '\\037')\"\nguest_rustflags=\"-C${unit_separator}passes=lower-atomic${unit_separator}-C${unit_separator}link-arg=-Ttext=0x00200800${unit_separator}-C${unit_separator}link-arg=--fatal-warnings${unit_separator}-C${unit_separator}panic=abort${unit_separator}--cfg${unit_separator}getrandom_backend=\\\"custom\\\"\"\nexport CARGO_ENCODED_RUSTFLAGS=\"${guest_rustflags}\"\n\necho \"==> Building provenance guest\"\ncargo +risc0 build --release --locked --target \"${target_triple}\" --manifest-path methods/guest/Cargo.toml\n\nmkdir -p /guest-output\ncp \"${CARGO_TARGET_DIR}/${target_triple}/release/provenance\" /guest-output/provenance.elf\nsha256sum /guest-output/provenance.elf\nls -la /guest-output\n" did not complete successfully: exit code: 101

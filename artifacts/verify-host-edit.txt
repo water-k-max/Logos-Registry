@@ -1,0 +1,43 @@
+manifest: 2 guest-graph crate manifests, 821 external crates, source tree 4d37847bbbf393317287003f361b884144ab3b3decc6a062672169e9fd3017f2
+GUEST GRAPH MATCHES — every guest-graph manifest, source file, Cargo.lock and dependency set is what the build was claimed from
+
+informational: 13 file(s) outside the guest graph differ, so this manifest no longer describes the tree byte for byte (re-generate it before publishing):
+  scripts/check_drift_split.sh
+    manifest <not in manifest>
+    current  added
+  scripts/evidence_pda_owner.sh
+    manifest <not in manifest>
+    current  added
+  scripts/evidence_pda_rule.sh
+    manifest <not in manifest>
+    current  added
+  scripts/evidence_pda_runtime.sh
+    manifest <not in manifest>
+    current  added
+  scripts/rpc_cadence.sh
+    manifest <not in manifest>
+    current  added
+  scripts/rpc_probe.sh
+    manifest <not in manifest>
+    current  added
+  sdk/Cargo.lock
+    manifest c8bb6b91f2f343224bdc3f354e3d1267c1acf74918db7f0e5b0bedd17c0d6e3d
+    current  d6cfe8b0add6bd8333f475cc4408960a70a1d5223b0efed0475ebe3e2adec5fb
+  sdk/Cargo.toml
+    manifest 2ab252e70f391c7be7673a8761dfc0a892107c85b02f43f2dee5ef044d93af7b
+    current  f387e45dbaef86774091a085dc03716d7383caa9747a9af0c1cc2f34206e40e0
+  sdk/src/chain.rs
+    manifest <not in manifest>
+    current  added
+  sdk/src/lib.rs
+    manifest ad308320f5a94dc1fb9adbceccac33c77fb092ef7c38b6b45536857922b3a233
+    current  e4c25490459a6ce14ef8571771d17e550a957e98adbd7bc722740878cd931904
+  sdk/tests/fixtures/live-entry-395.bin
+    manifest <not in manifest>
+    current  added
+  sdk/tests/fixtures/live-get-account.json
+    manifest <not in manifest>
+    current  added
+  tools/lezreg/src/main.rs
+    manifest 6fc951dd069166743737fc06411110f63476991ad954137b8d8fa3c4585b1f8e
+    current  e6d56c8c25ddd718a7469adbbf509b52a22004a10d69a7c4c2515597e3f20e43

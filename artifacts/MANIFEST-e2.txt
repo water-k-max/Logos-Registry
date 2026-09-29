@@ -1,0 +1,16 @@
+E2 (duplicate-claim) evidence set, 2026-09-28
+
+entry-395.bin                            the 395-byte registry entry account data, read pre-send AND
+                                           post-send with identical sha256
+                                           874aeba96fcdb9f8caf66a7d851835999cd9989ee25278fe5876bf396b5fb968
+e2acct-Hm4Yzd2v...json                   full getAccount JSON for the entry PDA (pre-send snapshot)
+e2acct-A4nuRThP...json                   pre-send snapshot of the attacker authority (len 0, nonce 0)
+e2-entry-after.{bin,json}                post-send re-read of the same two accounts
+e2-dryrun.log / e2-send.log              the 144-word payload as reviewed, then as submitted
+e2-competing-txhash.txt                  f6d82bf0... -> getTransaction returns null (never included)
+e2_verify.py / e2_control.py             the scripts that produced the above, incl. the control read
+                                           of be829ca1... (block 28803, 877 B, sha 493c291c...)
+entry-account-EMPTY-pre-inclusion.json   NOT the entry: this is the all-zero read taken seconds after
+                                           the first --send, before inclusion. Renamed 2026-09-28 because
+                                           it was previously mislabelled "entry-account.json".
+e2_lines.sh / e2_init_src*.sh = the spel codegen + error-variant probes behind the mechanism

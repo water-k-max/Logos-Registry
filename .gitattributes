@@ -1,2 +1,7 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Byte-exact checkouts are part of the claim. `source_cid` is a sha256 over the file *bytes* of this
+# tree, so anything that rewrites LF to CRLF on checkout -- `core.autocrlf=true`, a git client that
+# auto-detects text, an editor with CRLF buffers -- changes the digest without changing the program,
+# and a verifier would report "source does not match the registry" for a file that is identical in
+# every meaningful sense. `-text` disables end-of-line conversion for every path, so what is hashed
+# here is byte-for-byte what a reviewer gets.
+* -text

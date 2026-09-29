@@ -1,0 +1,15 @@
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source."git+https://github.com/logos-blockchain/logos-execution-zone.git?tag=v0.2.4"]
+git = "https://github.com/logos-blockchain/logos-execution-zone.git"
+tag = "v0.2.4"
+replace-with = "vendored-sources"
+
+[source."git+https://github.com/logos-co/spel.git?rev=1ef0500f8fc8ce3ddf95523726ae159db83f744f"]
+git = "https://github.com/logos-co/spel.git"
+rev = "1ef0500f8fc8ce3ddf95523726ae159db83f744f"
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "vendor"

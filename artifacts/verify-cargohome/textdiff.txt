@@ -1,0 +1,10 @@
+=== differing positions in .text (control vs /opt/alt-cargo) ===
+  differing_bytes=2434  range=1198..252615
+=== run-length histogram (consecutive differing positions form a run) ===
+  run_length=1   count=330
+  run_length=2   count=1052
+=== instruction-boundary alignment of the first differing byte of each run ===
+  runs=1382  run_start mod 4 -> 0:0 1:27 2:1298 3:57
+  An AUIPC/ADDI pair that only re-encodes its immediate differs in 1-2 adjacent bytes. The run
+  lengths (max 2, none longer) are the load-bearing measurement: no instruction sequence was
+  rewritten, only address fields. The mod-4 spread is reported for completeness.

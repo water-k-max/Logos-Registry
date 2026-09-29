@@ -1,0 +1,16 @@
+==> staging /home/user/provenance -> /home/user/prov-build-cargohome (no target/, no .git/, no artifacts/)
+CARGO_HOME       chars  ELF12          IMAGEID12    path-strings
+==> arm CARGO_HOME=/root/.cargo (network none, base r0.1.88.0-provseed-bundle1)
+/root/.cargo     12     a1a0fdc88a0e   7b4040d30bc2 18       = DEPLOYED .text 000800 .rodata 03ec98
+==> arm CARGO_HOME=/root/.carg1 (network none, base r0.1.88.0-provseed-bundle1)
+/root/.carg1     12     91e08ade94e1   cbc6a8cfbfd5 18       DIFFERENT .text 000800 .rodata 03ec98
+==> arm CARGO_HOME=/opt/alt-cargo (network none, base r0.1.88.0-provseed-bundle1)
+/opt/alt-cargo   14     0096833e07c2   0e94b5bf26e6 18       DIFFERENT .text 000800 .rodata 03ec98
+
+deployed (from the manifest, never hardcoded here):
+  ELF a1a0fdc88a0e06b82d2e36abc0f3b192fdf8be2914823a8784c5b291e1f56089 (506164 B)
+  ImageID 7b4040d30bc2354f5cfddedaea1a8a088ae6876f375220884485ea7d2e7b0bd6
+CONTROL HOLDS: the unmodified cargo home reproduced the deployed ImageID in this harness.
+RELOCATION TEST: 2 of 2 relocated arms changed the ImageID.
+SAME-LENGTH ARM (/root/.carg1, 12 chars like the control): moved=1
+CAUSATION ESTABLISHED: CARGO_HOME is a build input, and not because of its length.
