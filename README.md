@@ -132,25 +132,41 @@ this document is trying to pin down.
 
 - **Reproducible: measured, not asserted.** The full chain (seed bundle → builder image rebuilt from
   it → cold sealed build with `--network none` and a brand-new cache id → manifest → live testnet
-  record) was run end to end on 2026-09-29 at tip block 30232: 166 crates compiled in 1m16s, ELF
-  `a1a0fdc8…` / 506,164 B, `ImageID` `7b4040d3…` — identical to what is deployed. That run's stdout
-  is kept in the repository at `artifacts/outside-full.log`.
-- **`source_cid` is currently stale, and the verifier says so.** The on-chain `source_cid` is the
-  `tree_sha256` of the repository as it stood when the manifest was generated (`4d37847b…`). This
-  tree no longer hashes to that, and the number keeps moving: `5874edba…` when first measured,
-  `01cc2f5a…` half an hour later with nothing but documentation and script edits in between. Every
-  differing file is outside the guest graph — `lezbuild verify` reports
-  `GUEST GRAPH MATCHES`, so nothing that could move the `ImageID` changed. Because this repository
-  was created without version control, the byte-set `4d37847b…` names cannot be reconstructed yet,
-  so the source half of the on-chain record is not currently verifiable and the command above exits
-  4 on it. `repo_url` and `commit` are deliberately zero rather than guessed. The repository is now
-  under git, and closing the rest is a publishing step rather than a code step: push it, regenerate
-  the manifest against that exact tree, re-attach the record. After that the tree is *derivable from
-  a commit* instead of being a moving number, and this command exits 0.
-- **Delivery of the seed bundle and the seeded image is local-only so far.** They exist on this
-  machine; there is no registry push or release asset yet, which is the remaining gap between
-  "reproducible" and "reproducible by a stranger without being handed 2.2 GB".
+  record) has been run end to end three times on 2026-09-29, at tip blocks 30232 and 30542 (twice):
+  166 crates compiled in 1m16s–2m07s, ELF `a1a0fdc8…` / 506,164 B, `ImageID` `7b4040d3…` — identical
+  to what is deployed. The third run happened *after* 28 GB of build caches were deleted, which is
+  the point: the claim does not depend on anything cached on this machine. Logs:
+  `artifacts/outside-full.log`, `artifacts/outside-postreclaim.log`.
+- **What the verifier exits today, and why.** The on-chain `source_cid` is the whole-tree
+  `tree_sha256` measured on 2026-09-29 (`4d37847b…`), before this repository was under version
+  control; the tree has moved since, so the command above exits **4** on that leg while the build and
+  chain legs stay green. This is the honest, current state rather than a hidden defect: the verifier
+  refuses to say VERIFIED about a source claim it cannot check. Closing it is a publishing step —
+  pin a commit, regenerate the manifest against that exact tree, re-attach the record — not a code
+  step. `repo_url` is empty and `commit` is zero bytes on chain *deliberately*: a commit hash with no
+  resolvable referent would be a false claim, which is why they wait for the push.
+- **Byte-exact checkouts are part of the claim, so `.gitattributes` pins them.** `source_cid` is a
+  sha256 over file *bytes*, and `* -text` disables end-of-line conversion for every path. Without it,
+  a clone with `core.autocrlf=true` (the default on many Windows setups) rewrites LF to CRLF, and the
+  reviewer's tree no longer hashes to the published value even though the program is bit-identical.
+  If you are on Windows, verify with `git config core.autocrlf input` or just trust this file: it is
+  the reason it exists.
+- **Tests: 47 passing, re-measured after the cache deletion, and one that still fails.** Regenerate
+  with `bash scripts/m_b_evidence.sh` (it recompiles the workspace from source, so the first run on a
+  fresh clone is slow); its output is `artifacts/m-b-evidence.txt`, and section 11 names the commit
+  the numbers describe. Current sweep (2026-09-29, commit `36a319d`): `provenance_core` 5,
+  `lezreg` 14 (2 ABI + 12 CLI-contract), `lezbuild` 9, `sdk` 19 → **47 hermetic passing**, plus the
+  live chain read passing against the testnet, `RISC0_SKIP_BUILD=1 cargo check --offline --workspace
+  --all-targets` exit 0, and the verifier's six-case exit-code contract holding
+  (`verify` 0, `verify --strict` 2). **The storage REST smoke test fails** (exit 101 after 30 s):
+  there is no local Logos Storage gateway on `:8080`. It is left failing rather than skipped, because
+  a test that silently skips proves nothing.
+- **Delivery of the seed bundle is a release asset, pending.** The bundle
+  (`prov-seeds.tar.gz`, 598,990,268 B, sha256 `1a8ef1f4…`) exists only on this machine until it is
+  attached to a GitHub release beside this repository; the 2.2 GB seeded builder image is an
+  accelerator anyone can rebuild from the bundle, not something a verifier is obliged to trust.
 - The builder image digest on chain is the **upstream base** digest (`3e12f71b…`), because that is
   the pin the claim actually depends on; the seeded wrapper image is derived content.
 - `scripts/*` are run with `bash <script>`; several carry non-obvious environment caveats recorded
   in their own headers.
+
