@@ -1,6 +1,6 @@
 ==> staging /home/user/provenance -> /home/user/prov-build-outside (no target/, no .git/, no artifacts/)
 ==> SEEDED: caches come from the image; context carries no seed trees
-==> docker build (prov-envcheck-1790701078, base r0.1.88.0-provseed-20260928, network none)
+==> docker build (prov-outside-1790711965, base r0.1.88.0-provseed-bundle1, network none)
 ==> packing + ImageID
 a1a0fdc88a0e06b82d2e36abc0f3b192fdf8be2914823a8784c5b291e1f56089  /home/user/provenance/artifacts/verify-outside/provenance.elf
 6bd3e46c59b50f4be28702811cf69ab0dd28db640425efc287ea0ecb8c2b887b  /home/user/provenance/artifacts/verify-outside/provenance.bin

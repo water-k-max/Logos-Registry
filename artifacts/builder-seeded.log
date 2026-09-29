@@ -29,9 +29,8 @@
 #8 exporting layers done
 #8 exporting manifest sha256:f4c7366ae3615200353767e9add1ea2ffc27714c119e0aa157046970edf7e6ec done
 #8 exporting config sha256:e74f6393a8fc049ae91da6b73bf3dc3f2b3f33fef8c158a7bb1606103272c84d done
-#8 exporting attestation manifest sha256:8ffc1a39df66651cd857aaeed67583938bdb64a56246d7783e91de9b66bbf0e2 0.0s done
-#8 exporting manifest list sha256:b85469cd1801fe388ae13df8f579773e7e1821f07edf25486b716d28285a8aa5 0.0s done
-#8 naming to docker.io/library/provenance-builder-seeded:r0.1.88.0-provseed-bundle1
+#8 exporting attestation manifest sha256:9d62c321e7cb89edd0e5bfe54663c4b15c25d3ed862ac2555c011164995b885f 0.0s done
+#8 exporting manifest list sha256:d3a6c1948774a974be8ecc2800d822f579948c0b2a544f19c4dc89cc7bff0905 0.0s done
 #8 naming to docker.io/library/provenance-builder-seeded:r0.1.88.0-provseed-bundle1 done
 #8 unpacking to docker.io/library/provenance-builder-seeded:r0.1.88.0-provseed-bundle1 done
 #8 DONE 0.1s
