@@ -18,6 +18,17 @@ ENV RISC0_FEATURE_bigint2=""
 ENV CC_riscv32im_risc0_zkvm_elf=/root/.risc0/cpp/bin/riscv32-unknown-elf-gcc
 ENV CFLAGS_riscv32im_risc0_zkvm_elf="-march=rv32im -nostdlib"
 
+# Declared because it is load-bearing, and measured rather than assumed. Proven by
+# scripts/cargo_home_experiment.sh: with every other input fixed (same base image, same seeds, same
+# rustflags, --network none, empty caches) changing ONLY this value moves the ImageID --
+# /root/.carg1 (same length, one character different) yields cbc6a8cf..., /opt/alt-cargo yields
+# 0e94b5bf.... Each dependency's materialization path is embedded in the guest, so this string is
+# part of the program, not part of the environment. The value must stay /root/.cargo: the cache
+# mounts below and the embedded path strings both name that directory.
+# This is the image's own default, so the build is unchanged -- re-measured after the edit, because
+# "should be neutral" is not evidence.
+ENV CARGO_HOME=/root/.cargo
+
 RUN --mount=type=cache,id=${PROV_BUILD_CACHE_ID}-cargo-git,sharing=locked,target=/root/.cargo/git \
     --mount=type=cache,id=${PROV_BUILD_CACHE_ID}-cargo-registry,sharing=locked,target=/root/.cargo/registry \
     --mount=type=cache,id=${PROV_BUILD_CACHE_ID}-target,sharing=locked,target=/src/target/prov-guest <<'EOF'
