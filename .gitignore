@@ -8,3 +8,9 @@ ui/
 # The sdk tests read real chain bytes, not mocks; those fixtures are part of the source,
 # unlike artifacts/*.bin which the recipe reproduces.
 !sdk/tests/fixtures/*.bin
+
+# The cargo-home experiment arms: their logs and summary tables are the evidence, the bytes are
+# reproducible from the recipe (same rule as *.bin above), and the symbol-name dumps are 1 MB of
+# scratch that any reviewer can regenerate with scripts/cargo_home_symboltab.sh.
+artifacts/verify-cargohome/*/provenance.elf
+artifacts/verify-cargohome/syms/

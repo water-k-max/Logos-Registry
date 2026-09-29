@@ -74,7 +74,8 @@ Four inputs, all pinned, all measured — not "repo + Dockerfile":
 4. two cargo caches: the git database (389 MB, 184 files) and the crates.io registry cache
    (252 MB, 2,370 files).
 
-Input (4) is not a convenience. Two measurements settled that:
+Input (4) is not a convenience, and neither is the path inside the image. Three measurements settle
+the input set:
 
 - **The vendored input set is a *different program*.** `cargo vendor` (431 packages, 369 MB) builds
   cleanly on the same pinned base digest with `--network none`, but produces ELF
@@ -83,6 +84,13 @@ Input (4) is not a convenience. Two measurements settled that:
   (0x6c44 vs 0x66d4). The guest ELF embeds each dependency's *materialization path* (`file!()` in
   panic locations), so **the absolute cargo home is itself a build input**. Any recipe that changes
   where crates land on disk changes the program ID. See `scripts/vendor_reproduction.sh`.
+- **That inference is now a controlled result.** With every other input fixed (same base image, same
+  seeds, same rustflags, `--network none`, empty build caches), changing only `CARGO_HOME` moves the
+  ImageID: `/root/.cargo` reproduces the deployed `7b4040d3…`, `/root/.carg1` — the *same length*,
+  one character different — gives `cbc6a8cf…` with a **byte-identical `.text`** and exactly 25
+  differing bytes of `.rodata`, and `/opt/alt-cargo` gives `0e94b5bf…`. One character in the build
+  environment is a different program, which is why the pinned image is an input and not a
+  convenience. See `scripts/cargo_home_experiment.sh` and `scripts/cargo_home_sections.sh`.
 - **A cold build that fetches its own dependencies does not work here.** With network enabled and no
   caches it fails at ~243 s with `revision 47eba25… not found` and an SSL error (exit 101), even
   though `Updating crates.io index` succeeds. That is scoped to this egress path, not a claim about
