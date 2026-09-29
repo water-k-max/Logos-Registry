@@ -71,6 +71,21 @@ echo "VERIFY_STRICT_EXIT=$?" >> "$OUT"
 ./target/debug/lezbuild manifest --offline --out /tmp/mb-manifest-dry.json > /tmp/mb-manifest-dry.log 2>&1
 echo "MANIFEST_OFFLINE_EXIT=$? (written to /tmp only; the pinned artifacts/reproducible-build.json is untouched)" >> "$OUT"
 
+{ echo
+  echo "=== 10. one-command verifier exit-code contract (scripts/check_outside_exits.sh) ==="
+  echo "# 0 all agree / 1 build!=manifest / 2 chain!=manifest / 3 environment / 4 tree!=manifest."
+  echo "# Read-only: TREE_CHECK= suppresses the docker build in the 0/2 cases; the 4 case uses a"
+  echo "# tampered expectation, so no tree is hashed as if it were a pin."
+} >> "$OUT"
+bash /home/user/provenance/scripts/check_outside_exits.sh >> "$OUT" 2>&1
+echo "OUTSIDE_EXITS_EXIT=$? (0 means the whole exit-code contract held)" >> "$OUT"
+
+{ echo
+  echo "=== 11. which tree this evidence describes ==="
+} >> "$OUT"
+git -C /home/user/provenance log --oneline -1 >> "$OUT" 2>&1
+git -C /home/user/provenance status --short | wc -l >> "$OUT" 2>&1
+
 echo
 echo "wrote $OUT ($(wc -c < "$OUT") bytes)"
 grep -E 'test result|EXIT=' "$OUT"
