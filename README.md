@@ -130,14 +130,15 @@ this document is trying to pin down.
 - **`source_cid` is currently stale, and the verifier says so.** The on-chain `source_cid` is the
   `tree_sha256` of the repository as it stood when the manifest was generated (`4d37847b…`). This
   tree no longer hashes to that, and the number keeps moving: `5874edba…` when first measured,
-  `01cc2f5a…` half an hour later with nothing but documentation and script edits in between. Roughly
-  37 files differ, **all of them outside the guest graph** — `lezbuild verify` reports
-  `GUEST GRAPH MATCHES`, so nothing that could move the `ImageID` changed. Because the repository is
-  not under version control yet, the byte-set `4d37847b…` names cannot be reconstructed, so the
-  source half of the on-chain record is not currently verifiable and the command above exits 4 on
-  it. `repo_url` and `commit` are deliberately zero rather than guessed. Closing this means: put the
-  repository under git, publish it, regenerate the manifest against that exact tree, re-attach the
-  record — after which the tree is *derivable from a commit* instead of being a moving number.
+  `01cc2f5a…` half an hour later with nothing but documentation and script edits in between. Every
+  differing file is outside the guest graph — `lezbuild verify` reports
+  `GUEST GRAPH MATCHES`, so nothing that could move the `ImageID` changed. Because this repository
+  was created without version control, the byte-set `4d37847b…` names cannot be reconstructed yet,
+  so the source half of the on-chain record is not currently verifiable and the command above exits
+  4 on it. `repo_url` and `commit` are deliberately zero rather than guessed. The repository is now
+  under git, and closing the rest is a publishing step rather than a code step: push it, regenerate
+  the manifest against that exact tree, re-attach the record. After that the tree is *derivable from
+  a commit* instead of being a moving number, and this command exits 0.
 - **Delivery of the seed bundle and the seeded image is local-only so far.** They exist on this
   machine; there is no registry push or release asset yet, which is the remaining gap between
   "reproducible" and "reproducible by a stranger without being handed 2.2 GB".
