@@ -1,0 +1,30 @@
+manifest        /home/user/provenance/artifacts/reproducible-build.json
+  image id      7b4040d30bc2354f5cfddedaea1a8a088ae6876f375220884485ea7d2e7b0bd6
+  elf           a1a0fdc88a0e06b82d2e36abc0f3b192fdf8be2914823a8784c5b291e1f56089 (506164 B)
+  source_cid    4b88590246b3cc848e6432388330db8eedb2773589ad74f85c95f8ba7ed6483c
+  manifest_cid  c60de27ecef875590ddbbf6f4d268f4e42216a001c13a891d1985efd2e21e918 (sha256 of the manifest file itself)
+  builder       3e12f71bacd27527a61dea96fa0e53e468c99aa261d3a1019b593f6dbd943eb3
+  dep_audit     a809d64904f1d63eea68665ae3471cc0ff7ec29259243703464900ad26ded3fb
+  repo_url      45 chars expected
+
+source tree     4b88590246b3cc848e6432388330db8eedb2773589ad74f85c95f8ba7ed6483c
+                this checkout IS the tree the manifest and the chain name
+
+prov-seeds.tar.gz: OK
+bundle extracted /home/user/prov-seeds/prov-seeds.tar.gz -> gitdb 184 files, regcache 2370 files
+builder image rebuilt from the bundle: r0.1.88.0-provseed-bundle1
+
+cold build      cache id prov-outside-1790765374, network none, base r0.1.88.0-provseed-bundle1
+  elf           a1a0fdc88a0e06b82d2e36abc0f3b192fdf8be2914823a8784c5b291e1f56089 (506164 B)
+  image id      7b4040d30bc2354f5cfddedaea1a8a088ae6876f375220884485ea7d2e7b0bd6
+  BUILD MATCHES the manifest
+
+chain           https://testnet.lez.logos.co (tip block 31446)
+  entry account Hm4Yzd2vgTCvhvPFQUzLT2xoYidRK84QYBzPLQnH8dbJ   status REGISTERED   revision 4
+  ok            source_cid     4b88590246b3cc848e6432388330db8eedb2773589ad74f85c95f8ba7ed6483c
+  ok            manifest_cid   c60de27ecef875590ddbbf6f4d268f4e42216a001c13a891d1985efd2e21e918
+  ok            builder        3e12f71bacd27527a61dea96fa0e53e468c99aa261d3a1019b593f6dbd943eb3
+  ok            dep_audit      a809d64904f1d63eea68665ae3471cc0ff7ec29259243703464900ad26ded3fb
+  ok            repo_url_len   45
+
+VERIFIED: the on-chain Tier-3 record matches the manifest, which matches the bytes this machine just built, which matches this checkout file for file.
