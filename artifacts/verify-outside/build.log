@@ -1,9 +1,6 @@
 #0 building with "default" instance using docker driver
 
 #1 [internal] load build definition from build-guest.Dockerfile
-#1 DONE 0.0s
-
-#1 [internal] load build definition from build-guest.Dockerfile
 #1 transferring dockerfile: 7.09kB done
 #1 DONE 0.0s
 
@@ -14,206 +11,206 @@
 #3 transferring context: 2B done
 #3 DONE 0.0s
 
-#4 [build 1/4] FROM docker.io/risczero/risc0-guest-builder:r0.1.88.0-provseed-bundle1@sha256:d3a6c1948774a974be8ecc2800d822f579948c0b2a544f19c4dc89cc7bff0905
-#4 resolve docker.io/risczero/risc0-guest-builder:r0.1.88.0-provseed-bundle1@sha256:d3a6c1948774a974be8ecc2800d822f579948c0b2a544f19c4dc89cc7bff0905 0.0s done
+#4 [build 1/4] FROM docker.io/risczero/risc0-guest-builder:r0.1.88.0-provseed-bundle1@sha256:d6beaf026dc5558a5ce1b45042e4b1091b3628a03f6f4c8e4d9802e74bd4e11e
+#4 resolve docker.io/risczero/risc0-guest-builder:r0.1.88.0-provseed-bundle1@sha256:d6beaf026dc5558a5ce1b45042e4b1091b3628a03f6f4c8e4d9802e74bd4e11e 0.0s done
 #4 DONE 0.0s
 
 #5 [internal] load build context
-#5 transferring context: 13.98kB 0.0s done
+#5 transferring context: 31.71kB 0.0s done
 #5 DONE 0.0s
 
 #6 [build 2/4] WORKDIR /src
 #6 CACHED
 
 #7 [build 3/4] COPY . .
-#7 DONE 0.5s
+#7 DONE 0.8s
 
-#8 [build 4/4] RUN --mount=type=cache,id=prov-outside-1790711965-cargo-git,sharing=locked,target=/root/.cargo/git     --mount=type=cache,id=prov-outside-1790711965-cargo-registry,sharing=locked,target=/root/.cargo/registry     --mount=type=cache,id=prov-outside-1790711965-target,sharing=locked,target=/src/target/prov-guest <<'EOF' (set -eu...)
-#8 1.242 STAGED-FROM-IMAGE gitdb
-#8 3.485 STAGED-FROM-IMAGE regcache
-#8 4.095 SEEDED 389M	/root/.cargo/git/db
-#8 4.873 SEEDED-REGISTRY 252M	/root/.cargo/registry
-#8 4.873 ==> SEALED BUILD: registry from /src/regcache, cargo network disabled
-#8 4.874 ==> Building provenance guest
-#8 9.823    Compiling proc-macro2 v1.0.107
-#8 9.823    Compiling quote v1.0.47
-#8 9.824    Compiling unicode-ident v1.0.26
-#8 9.830    Compiling version_check v0.9.5
-#8 9.830    Compiling autocfg v1.5.1
-#8 9.834    Compiling paste v1.0.15
-#8 9.840    Compiling serde_core v1.0.229
-#8 9.843    Compiling zerocopy v0.8.59
-#8 10.28    Compiling once_cell v1.21.4
-#8 10.69    Compiling generic-array v0.14.7
-#8 10.76    Compiling typenum v1.20.1
-#8 10.82    Compiling cfg-if v1.0.5
-#8 10.89    Compiling hashbrown v0.17.1
-#8 10.94    Compiling equivalent v1.0.2
-#8 11.04    Compiling serde v1.0.229
-#8 11.06    Compiling rustversion v1.0.23
-#8 11.08    Compiling num-traits v0.2.19
-#8 11.53    Compiling winnow v1.0.4
-#8 11.81    Compiling toml_datetime v1.1.1+spec-1.1.0
-#8 12.04    Compiling cfg_aliases v0.2.2
-#8 12.12    Compiling borsh v1.8.1
-#8 12.77    Compiling indexmap v2.14.2
-#8 13.01    Compiling syn v2.0.119
-#8 13.15    Compiling syn v3.0.6
-#8 13.40    Compiling num-integer v0.1.47
-#8 13.45    Compiling ahash v0.8.12
-#8 13.64    Compiling thiserror v2.0.21
-#8 13.99    Compiling num-bigint v0.4.8
-#8 14.03    Compiling getrandom v0.4.3
-#8 14.27    Compiling anyhow v1.0.104
-#8 14.31    Compiling const-oid v0.9.6
-#8 14.41    Compiling block-buffer v0.10.4
-#8 14.55    Compiling toml_parser v1.1.3+spec-1.1.0
-#8 14.60    Compiling crypto-common v0.1.7
-#8 14.76    Compiling subtle v2.6.1
-#8 14.84    Compiling risc0-zkp v3.0.5
-#8 15.02    Compiling digest v0.10.7
-#8 15.53    Compiling toml_edit v0.25.15+spec-1.1.0
-#8 17.65    Compiling proc-macro-crate v3.5.0
-#8 18.52    Compiling unicode-xid v0.2.6
-#8 21.51    Compiling ruint-macro v1.2.1
-#8 21.53    Compiling hex v0.4.3
-#8 21.54    Compiling rand_core v0.6.4
-#8 21.99    Compiling syn v1.0.109
-#8 22.04    Compiling tracing-core v0.1.36
-#8 25.02    Compiling cmov v0.5.4
-#8 25.35    Compiling pin-project-lite v0.2.17
-#8 25.45    Compiling log v0.4.34
-#8 25.84    Compiling ctutils v0.4.2
-#8 27.05    Compiling arrayvec v0.7.8
-#8 28.34    Compiling either v1.18.0
-#8 29.31    Compiling libm v0.2.16
-#8 29.91    Compiling serde_derive v1.0.229
-#8 30.04    Compiling bytemuck_derive v1.12.1
-#8 30.14    Compiling borsh-derive v1.8.1
-#8 30.52    Compiling tracing-attributes v0.1.31
-#8 31.84    Compiling zeroize_derive v1.5.0
-#8 33.29    Compiling ark-serialize-derive v0.5.0
-#8 34.30    Compiling enum-ordinalize-derive v4.3.2
-#8 34.34    Compiling ark-ff-macros v0.5.0
-#8 34.54    Compiling ark-ff-asm v0.5.0
-#8 34.57    Compiling num_enum_derive v0.7.6
-#8 34.86    Compiling stability v0.2.1
-#8 35.58    Compiling thiserror-impl v2.0.21
-#8 35.76    Compiling derive_more-impl v2.1.1
-#8 35.85    Compiling enum-ordinalize v4.3.2
-#8 35.87    Compiling ppv-lite86 v0.2.21
-#8 35.93    Compiling educe v0.6.0
-#8 36.57    Compiling rand_chacha v0.3.1
-#8 36.59    Compiling derivative v2.2.0
-#8 37.62    Compiling rand v0.8.8
-#8 39.28    Compiling ark-std v0.5.0
-#8 39.41    Compiling tracing v0.1.44
-#8 40.30    Compiling zeroize v1.9.0
-#8 40.53    Compiling ark-crypto-primitives-macros v0.5.0
-#8 40.59    Compiling getrandom v0.3.4
-#8 40.76    Compiling ark-serialize v0.5.0
-#8 40.83    Compiling bytemuck v1.25.2
-#8 40.94    Compiling itertools v0.13.0
-#8 41.34    Compiling hybrid-array v0.4.15
-#8 41.61    Compiling risc0-circuit-recursion v4.0.5
-#8 41.63    Compiling cpufeatures v0.2.17
-#8 41.66    Compiling libc v0.2.189
-#8 41.69    Compiling rand_core v0.9.5
-#8 41.76    Compiling sha2 v0.10.9
-#8 42.54    Compiling num_enum v0.7.6
-#8 42.64    Compiling blake2 v0.10.6
-#8 44.33    Compiling getrandom v0.2.17
-#8 44.57    Compiling ident_case v1.0.1
-#8 44.69    Compiling strsim v0.11.1
-#8 44.73    Compiling risc0-circuit-keccak v4.0.6
-#8 45.32    Compiling ark-ff v0.5.0
-#8 45.34    Compiling darling_core v0.24.1
-#8 45.35    Compiling risc0-zkvm-platform v2.2.3
-#8 48.45    Compiling allocator-api2 v0.2.21
-#8 48.49    Compiling rand_core v0.10.1
-#8 49.61    Compiling hashbrown v0.15.5
-#8 49.77    Compiling risc0-core v3.0.2
-#8 51.48    Compiling hex-literal v0.4.1
-#8 51.94    Compiling crypto-common v0.2.2
-#8 52.03    Compiling cobs v0.3.0
-#8 56.60    Compiling rand v0.9.5
-#8 59.70    Compiling tracing-subscriber v0.2.25
-#8 60.17    Compiling darling_macro v0.24.1
-#8 60.76    Compiling darling v0.24.1
-#8 60.83    Compiling spin v0.9.9
-#8 61.24    Compiling zmij v1.0.23
-#8 61.75    Compiling lazy_static v1.5.0
-#8 61.93    Compiling serde_with_macros v3.24.0
-#8 62.18    Compiling ruint v1.17.0
-#8 62.26    Compiling postcard v1.1.3
-#8 63.83    Compiling ark-poly v0.5.0
-#8 63.84    Compiling ark-relations v0.5.1
-#8 64.92    Compiling block-buffer v0.12.1
-#8 65.29    Compiling derive_more v2.1.1
-#8 65.55    Compiling semver v1.0.28
-#8 65.69    Compiling keccak v0.1.6
-#8 65.73    Compiling byteorder v1.5.0
-#8 66.15    Compiling elf v0.7.4
-#8 66.73    Compiling merlin v3.0.0
-#8 67.34    Compiling ark-snark v0.5.1
-#8 67.48    Compiling ark-ec v0.5.0
-#8 67.79    Compiling thiserror v1.0.69
-#8 67.95    Compiling serde_json v1.0.151
-#8 68.26    Compiling digest v0.11.3
-#8 68.55    Compiling risc0-binfmt v3.0.5
-#8 68.73    Compiling inout v0.2.2
-#8 69.17    Compiling thiserror-impl v1.0.69
-#8 69.30    Compiling keccak v0.2.2
-#8 69.88    Compiling no_std_strings v0.1.3
-#8 70.54    Compiling downcast-rs v1.2.1
-#8 70.63    Compiling bit-vec v0.8.0
-#8 70.77    Compiling include_bytes_aligned v0.1.4
-#8 71.05    Compiling rrs-lib v0.1.0
-#8 71.10    Compiling risc0-circuit-rv32im v4.0.5
-#8 71.17    Compiling risc0-zkos-v1compat v2.2.3
-#8 72.89    Compiling sha3 v0.11.0
-#8 74.08    Compiling cipher v0.5.2
-#8 75.03    Compiling ark-crypto-primitives v0.5.0
-#8 75.09    Compiling ark-bn254 v0.5.0
-#8 75.30    Compiling kem v0.3.0
-#8 75.66    Compiling module-lattice v0.2.3
-#8 76.56    Compiling serde_spanned v0.6.9
-#8 76.82    Compiling ark-groth16 v0.5.0
-#8 76.82    Compiling toml_datetime v0.6.11
-#8 77.49    Compiling cpufeatures v0.3.1
-#8 77.50    Compiling toml_write v0.1.2
-#8 77.78    Compiling winnow v0.7.15
-#8 77.98    Compiling chacha20 v0.10.2
-#8 78.50    Compiling ml-kem v0.3.2
-#8 79.23    Compiling risc0-groth16 v3.0.5
-#8 82.98    Compiling serde_with v3.24.0
-#8 85.74    Compiling risc0-zkvm v3.0.5
-#8 86.76    Compiling toml_edit v0.22.27
-#8 87.19    Compiling bytesize v2.7.0
-#8 92.73    Compiling memchr v2.8.3
-#8 94.53    Compiling base58 v0.2.0
-#8 95.57    Compiling itoa v1.0.18
-#8 97.88    Compiling lee_core v0.1.0 (https://github.com/logos-blockchain/logos-execution-zone.git?tag=v0.2.4#47eba256)
-#8 99.25    Compiling toml v0.8.23
-#8 105.7    Compiling spel-framework-core v0.6.0 (https://github.com/logos-co/spel.git?rev=1ef0500f8fc8ce3ddf95523726ae159db83f744f#1ef0500f)
-#8 107.8    Compiling clock_core v0.1.0 (https://github.com/logos-blockchain/logos-execution-zone.git?tag=v0.2.4#47eba256)
-#8 109.9    Compiling spel-framework-macros v0.6.0 (https://github.com/logos-co/spel.git?rev=1ef0500f8fc8ce3ddf95523726ae159db83f744f#1ef0500f)
-#8 111.9    Compiling provenance_core v0.1.0 (/src/provenance_core)
-#8 111.9    Compiling spel-framework v0.6.0 (https://github.com/logos-co/spel.git?rev=1ef0500f8fc8ce3ddf95523726ae159db83f744f#1ef0500f)
-#8 113.3    Compiling provenance-guest v0.1.0 (/src/methods/guest)
-#8 114.5     Finished `release` profile [optimized] target(s) in 1m 41s
-#8 114.6 a1a0fdc88a0e06b82d2e36abc0f3b192fdf8be2914823a8784c5b291e1f56089  /guest-output/provenance.elf
-#8 114.6 total 504
-#8 114.6 drwxr-xr-x 2 root root   4096 Sep 29 20:01 .
-#8 114.6 drwxr-xr-x 1 root root   4096 Sep 29 20:01 ..
-#8 114.6 -rwxr-xr-x 1 root root 506164 Sep 29 20:01 provenance.elf
-#8 DONE 115.3s
+#8 [build 4/4] RUN --mount=type=cache,id=prov-outside-1790729497-cargo-git,sharing=locked,target=/root/.cargo/git     --mount=type=cache,id=prov-outside-1790729497-cargo-registry,sharing=locked,target=/root/.cargo/registry     --mount=type=cache,id=prov-outside-1790729497-target,sharing=locked,target=/src/target/prov-guest <<'EOF' (set -eu...)
+#8 1.515 STAGED-FROM-IMAGE gitdb
+#8 7.723 STAGED-FROM-IMAGE regcache
+#8 8.452 SEEDED 389M	/root/.cargo/git/db
+#8 9.400 SEEDED-REGISTRY 252M	/root/.cargo/registry
+#8 9.400 ==> SEALED BUILD: registry from /src/regcache, cargo network disabled
+#8 9.400 ==> Building provenance guest
+#8 15.67    Compiling proc-macro2 v1.0.107
+#8 15.67    Compiling unicode-ident v1.0.26
+#8 15.67    Compiling quote v1.0.47
+#8 15.67    Compiling version_check v0.9.5
+#8 15.67    Compiling paste v1.0.15
+#8 15.70    Compiling autocfg v1.5.1
+#8 15.70    Compiling serde_core v1.0.229
+#8 15.70    Compiling zerocopy v0.8.59
+#8 16.52    Compiling typenum v1.20.1
+#8 17.28    Compiling generic-array v0.14.7
+#8 17.53    Compiling once_cell v1.21.4
+#8 17.58    Compiling cfg-if v1.0.5
+#8 17.75    Compiling serde v1.0.229
+#8 17.77    Compiling num-traits v0.2.19
+#8 17.85    Compiling equivalent v1.0.2
+#8 18.10    Compiling hashbrown v0.17.1
+#8 18.17    Compiling rustversion v1.0.23
+#8 18.72    Compiling winnow v1.0.4
+#8 19.18    Compiling toml_datetime v1.1.1+spec-1.1.0
+#8 19.74    Compiling cfg_aliases v0.2.2
+#8 19.95    Compiling borsh v1.8.1
+#8 21.03    Compiling syn v2.0.119
+#8 21.08    Compiling syn v3.0.6
+#8 21.42    Compiling indexmap v2.14.2
+#8 22.08    Compiling num-integer v0.1.47
+#8 22.43    Compiling ahash v0.8.12
+#8 22.74    Compiling getrandom v0.4.3
+#8 23.14    Compiling num-bigint v0.4.8
+#8 23.23    Compiling anyhow v1.0.104
+#8 23.48    Compiling thiserror v2.0.21
+#8 23.50    Compiling block-buffer v0.10.4
+#8 23.72    Compiling toml_parser v1.1.3+spec-1.1.0
+#8 23.82    Compiling crypto-common v0.1.7
+#8 24.14    Compiling subtle v2.6.1
+#8 24.15    Compiling risc0-zkp v3.0.5
+#8 24.31    Compiling const-oid v0.9.6
+#8 24.73    Compiling digest v0.10.7
+#8 26.67    Compiling toml_edit v0.25.15+spec-1.1.0
+#8 28.57    Compiling proc-macro-crate v3.5.0
+#8 29.76    Compiling unicode-xid v0.2.6
+#8 29.83    Compiling rand_core v0.6.4
+#8 29.93    Compiling ruint-macro v1.2.1
+#8 30.50    Compiling hex v0.4.3
+#8 30.57    Compiling syn v1.0.109
+#8 31.03    Compiling tracing-core v0.1.36
+#8 34.26    Compiling cmov v0.5.4
+#8 35.45    Compiling pin-project-lite v0.2.17
+#8 36.31    Compiling log v0.4.34
+#8 36.98    Compiling ctutils v0.4.2
+#8 37.69    Compiling arrayvec v0.7.8
+#8 41.13    Compiling either v1.18.0
+#8 41.75    Compiling libm v0.2.16
+#8 43.19    Compiling getrandom v0.3.4
+#8 43.81    Compiling ppv-lite86 v0.2.21
+#8 43.87    Compiling derivative v2.2.0
+#8 43.98    Compiling itertools v0.13.0
+#8 44.65    Compiling rand_chacha v0.3.1
+#8 44.67    Compiling serde_derive v1.0.229
+#8 48.39    Compiling bytemuck_derive v1.12.1
+#8 48.85    Compiling borsh-derive v1.8.1
+#8 49.07    Compiling thiserror-impl v2.0.21
+#8 49.57    Compiling zeroize_derive v1.5.0
+#8 49.99    Compiling tracing-attributes v0.1.31
+#8 51.19    Compiling enum-ordinalize-derive v4.3.2
+#8 51.75    Compiling ark-serialize-derive v0.5.0
+#8 52.76    Compiling num_enum_derive v0.7.6
+#8 52.80    Compiling ark-ff-macros v0.5.0
+#8 52.90    Compiling enum-ordinalize v4.3.2
+#8 52.98    Compiling educe v0.6.0
+#8 53.36    Compiling ark-ff-asm v0.5.0
+#8 54.03    Compiling stability v0.2.1
+#8 54.19    Compiling derive_more-impl v2.1.1
+#8 54.91    Compiling rand v0.8.8
+#8 54.98    Compiling tracing v0.1.44
+#8 56.47    Compiling zeroize v1.9.0
+#8 56.75    Compiling ark-std v0.5.0
+#8 56.98    Compiling ark-crypto-primitives-macros v0.5.0
+#8 57.02    Compiling ark-serialize v0.5.0
+#8 57.39    Compiling bytemuck v1.25.2
+#8 57.71    Compiling hybrid-array v0.4.15
+#8 58.44    Compiling risc0-circuit-recursion v4.0.5
+#8 58.48    Compiling cpufeatures v0.2.17
+#8 58.58    Compiling libc v0.2.189
+#8 58.71    Compiling rand_core v0.9.5
+#8 59.07    Compiling sha2 v0.10.9
+#8 59.12    Compiling num_enum v0.7.6
+#8 59.78    Compiling blake2 v0.10.6
+#8 61.05    Compiling getrandom v0.2.17
+#8 61.37    Compiling risc0-circuit-keccak v4.0.6
+#8 61.40    Compiling ident_case v1.0.1
+#8 61.56    Compiling strsim v0.11.1
+#8 61.68    Compiling ark-ff v0.5.0
+#8 62.88    Compiling darling_core v0.24.1
+#8 63.52    Compiling risc0-zkvm-platform v2.2.3
+#8 65.91    Compiling allocator-api2 v0.2.21
+#8 66.09    Compiling rand_core v0.10.1
+#8 67.26    Compiling hashbrown v0.15.5
+#8 67.49    Compiling risc0-core v3.0.2
+#8 69.54    Compiling hex-literal v0.4.1
+#8 69.77    Compiling cobs v0.3.0
+#8 70.59    Compiling crypto-common v0.2.2
+#8 71.40    Compiling rand v0.9.5
+#8 75.93    Compiling tracing-subscriber v0.2.25
+#8 78.08    Compiling zmij v1.0.23
+#8 78.63    Compiling spin v0.9.9
+#8 79.01    Compiling lazy_static v1.5.0
+#8 79.20    Compiling ruint v1.17.0
+#8 79.37    Compiling postcard v1.1.3
+#8 81.70    Compiling block-buffer v0.12.1
+#8 82.10    Compiling derive_more v2.1.1
+#8 82.30    Compiling semver v1.0.28
+#8 82.59    Compiling keccak v0.1.6
+#8 82.61    Compiling elf v0.7.4
+#8 83.15    Compiling byteorder v1.5.0
+#8 83.78    Compiling darling_macro v0.24.1
+#8 84.25    Compiling ark-poly v0.5.0
+#8 84.84    Compiling darling v0.24.1
+#8 84.90    Compiling ark-relations v0.5.1
+#8 84.94    Compiling serde_with_macros v3.24.0
+#8 85.45    Compiling merlin v3.0.0
+#8 85.92    Compiling risc0-binfmt v3.0.5
+#8 86.19    Compiling ark-snark v0.5.1
+#8 86.50    Compiling serde_json v1.0.151
+#8 86.56    Compiling thiserror v1.0.69
+#8 87.16    Compiling digest v0.11.3
+#8 88.19    Compiling inout v0.2.2
+#8 88.55    Compiling ark-ec v0.5.0
+#8 88.64    Compiling thiserror-impl v1.0.69
+#8 88.66    Compiling keccak v0.2.2
+#8 89.36    Compiling downcast-rs v1.2.1
+#8 89.47    Compiling no_std_strings v0.1.3
+#8 90.22    Compiling include_bytes_aligned v0.1.4
+#8 90.30    Compiling bit-vec v0.8.0
+#8 90.68    Compiling risc0-zkos-v1compat v2.2.3
+#8 90.89    Compiling rrs-lib v0.1.0
+#8 91.31    Compiling risc0-circuit-rv32im v4.0.5
+#8 91.72    Compiling sha3 v0.11.0
+#8 94.09    Compiling cipher v0.5.2
+#8 95.10    Compiling kem v0.3.0
+#8 95.62    Compiling module-lattice v0.2.3
+#8 96.93    Compiling ark-crypto-primitives v0.5.0
+#8 97.21    Compiling ark-bn254 v0.5.0
+#8 97.53    Compiling toml_datetime v0.6.11
+#8 97.85    Compiling serde_spanned v0.6.9
+#8 98.09    Compiling cpufeatures v0.3.1
+#8 98.21    Compiling winnow v0.7.15
+#8 98.25    Compiling toml_write v0.1.2
+#8 98.74    Compiling ark-groth16 v0.5.0
+#8 100.7    Compiling chacha20 v0.10.2
+#8 101.1    Compiling risc0-groth16 v3.0.5
+#8 101.3    Compiling ml-kem v0.3.2
+#8 104.1    Compiling serde_with v3.24.0
+#8 105.3    Compiling risc0-zkvm v3.0.5
+#8 105.7    Compiling toml_edit v0.22.27
+#8 111.1    Compiling bytesize v2.7.0
+#8 113.7    Compiling base58 v0.2.0
+#8 115.0    Compiling memchr v2.8.3
+#8 117.2    Compiling itoa v1.0.18
+#8 117.4    Compiling toml v0.8.23
+#8 117.7    Compiling lee_core v0.1.0 (https://github.com/logos-blockchain/logos-execution-zone.git?tag=v0.2.4#47eba256)
+#8 128.9    Compiling spel-framework-core v0.6.0 (https://github.com/logos-co/spel.git?rev=1ef0500f8fc8ce3ddf95523726ae159db83f744f#1ef0500f)
+#8 130.2    Compiling clock_core v0.1.0 (https://github.com/logos-blockchain/logos-execution-zone.git?tag=v0.2.4#47eba256)
+#8 134.6    Compiling spel-framework-macros v0.6.0 (https://github.com/logos-co/spel.git?rev=1ef0500f8fc8ce3ddf95523726ae159db83f744f#1ef0500f)
+#8 137.6    Compiling provenance_core v0.1.0 (/src/provenance_core)
+#8 137.6    Compiling spel-framework v0.6.0 (https://github.com/logos-co/spel.git?rev=1ef0500f8fc8ce3ddf95523726ae159db83f744f#1ef0500f)
+#8 139.4    Compiling provenance-guest v0.1.0 (/src/methods/guest)
+#8 141.6     Finished `release` profile [optimized] target(s) in 2m 03s
+#8 141.7 a1a0fdc88a0e06b82d2e36abc0f3b192fdf8be2914823a8784c5b291e1f56089  /guest-output/provenance.elf
+#8 141.7 total 504
+#8 141.7 drwxr-xr-x 2 root root   4096 Sep 30 00:54 .
+#8 141.7 drwxr-xr-x 1 root root   4096 Sep 30 00:54 ..
+#8 141.7 -rwxr-xr-x 1 root root 506164 Sep 30 00:54 provenance.elf
+#8 DONE 142.3s
 
 #9 [export 1/1] COPY --from=build /guest-output /
 #9 CACHED
 
 #10 exporting to client directory
-#10 copying files 506.29kB 0.1s done
+#10 copying files 506.29kB 0.0s done
 #10 DONE 0.1s
 a1a0fdc88a0e06b82d2e36abc0f3b192fdf8be2914823a8784c5b291e1f56089  /home/user/provenance/artifacts/verify-outside/provenance.elf
 6bd3e46c59b50f4be28702811cf69ab0dd28db640425efc287ea0ecb8c2b887b  /home/user/provenance/artifacts/verify-outside/provenance.bin
