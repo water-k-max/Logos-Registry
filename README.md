@@ -17,14 +17,16 @@ evidence that the deployed binary can be reproduced from a pinned, offline input
 | guest ELF | `a1a0fdc88a0e06b82d2e36abc0f3b192fdf8be2914823a8784c5b291e1f56089`, 506,164 B |
 | guest `.bin` | `6bd3e46c59b50f4be28702811cf69ab0dd28db640425efc287ea0ecb8c2b887b` |
 | network | `https://testnet.lez.logos.co/` |
-| registry entry for this program | account `Hm4Yzd2vgTCvhvPFQUzLT2xoYidRK84QYBzPLQnH8dbJ` (PDA under the registry's own namespace), `REGISTERED`, revision 2 |
+| public source | `https://github.com/water-k-max/Logos-Registry`, branch `main`, visibility `public` (re-checked anonymously on 2026-09-30) |
+| registry entry for this program | account `Hm4Yzd2vgTCvhvPFQUzLT2xoYidRK84QYBzPLQnH8dbJ` (PDA under the registry's own namespace), `REGISTERED`. The source re-attach described under *Status* writes on-chain revision **3**; revision **2** is what the record held before that write. |
 | registering authority | `8tWS2X8e59Q4FYUUExxxFzpNjbQirzkFjDjYSukVzsqe` |
 | block explorer | `https://explorer.testnet.lez.logos.co/account/9J7yRA8WADpGRtSDaQ4TFyPz37hwD6JaSJTNteUEUU77` |
 
 ## Verify it from the outside — one command
 
 You do not need my machine, my cargo caches or my network access. You need this repository, the
-pinned builder image (or the seed bundle it is built from), and Docker.
+pinned builder image (or the seed bundle it is built from), and Docker. The repository is public at
+`https://github.com/water-k-max/Logos-Registry`; cloning it is input (1) of the build.
 
 ```bash
 BUILD=1 bash scripts/verify_from_the_outside.sh
@@ -137,14 +139,40 @@ this document is trying to pin down.
   to what is deployed. The third run happened *after* 28 GB of build caches were deleted, which is
   the point: the claim does not depend on anything cached on this machine. Logs:
   `artifacts/outside-full.log`, `artifacts/outside-postreclaim.log`.
-- **What the verifier exits today, and why.** The on-chain `source_cid` is the whole-tree
-  `tree_sha256` measured on 2026-09-29 (`4d37847b…`), before this repository was under version
-  control; the tree has moved since, so the command above exits **4** on that leg while the build and
-  chain legs stay green. This is the honest, current state rather than a hidden defect: the verifier
-  refuses to say VERIFIED about a source claim it cannot check. Closing it is a publishing step —
-  pin a commit, regenerate the manifest against that exact tree, re-attach the record — not a code
-  step. `repo_url` is empty and `commit` is zero bytes on chain *deliberately*: a commit hash with no
-  resolvable referent would be a false claim, which is why they wait for the push.
+- **Published is not the same claim as verifiable, so they are measured separately.** This tree is on
+  GitHub at `https://github.com/water-k-max/Logos-Registry` (`main`, public). The history got there
+  without rewriting anything a reviewer could already see: the frozen commit was merged with the
+  repository's initial commit (`.gitattributes` resolved to the `* -text` version, so the merged tree
+  oid equals the frozen tree oid) and the push was a fast-forward; the pre-publication placeholder is
+  still reachable on the branch `placeholder-initial`. The check worth running goes one step past the
+  git object store: fetch what GitHub actually *serves*, then hash the pruned file set and compare it
+  to the manifest. Measured that way on 2026-09-30 — the tarball of `main` unpacked to 159 files /
+  6,543,880 B with `* -text` intact, 87 of them outside the pruned set and therefore covered by
+  `source_cid`, and `lezbuild verify` against the extracted tree reported a `source_tree_actual` equal
+  to the manifest's `source_cid`, `GUEST GRAPH MATCHES`, exit 0. Those file and byte counts describe one
+  tree at one moment; the invariant is the equality, not the numbers.
+- **No document inside this tree can quote this tree's hash, so none does.** `source_cid` is a sha256
+  over sorted `(path, content-sha256)` pairs for every file outside the pruned set (`target`, `.git`,
+  `artifacts`, `gitdb`, `regcache`, `.cargo`, `node_modules` — see `PRUNE` in
+  `tools/lezbuild/src/hash.rs`), and that drives three consequences this project lives by: a README
+  edit moves `source_cid` without moving the guest, which is why the verifier runs the tree leg
+  *before* the expensive build and exits 4 rather than printing VERIFIED about a source nobody can
+  reconstruct; `artifacts/` being pruned is what lets the manifest be regenerated after the
+  documentation is final without moving `source_cid` (its own sha256, the on-chain `manifest_cid`, is a
+  separate value that stays independently checkable); and no file can carry either its tree's hash or
+  the id of the commit that carries it — writing either would change both. So the `source_cid` and the
+  pinned `commit` live in `artifacts/reproducible-build.json` and in the Tier-3 record, never here, and
+  `bash scripts/verify_from_the_outside.sh` with the tree leg enabled is what proves they still agree
+  with your clone. The manifest also lists every pruned-free file with its own sha256, so when the tree
+  leg fails the output names *which* file moved instead of just saying "stale".
+- **The on-chain `repo_url` and `commit` are being written, and were zero until now on purpose.**
+  Before the freeze they were empty/zero because a commit hash with no resolvable referent is a worse
+  claim than a blank field; `commit` in particular could not be set while the repository was not
+  public. The value names the last commit that touched a *hashed* file. Later commits are allowed to
+  exist and to change only pruned paths (regenerated evidence, rebuilt manifests) without invalidating
+  it — which is the property that lets this document be final before the numbers in it are refreshed.
+  `builder_digest` and `dep_audit_hash` are unchanged by the freeze — the guest did not move, and the
+  whole point of exit 4 is to distinguish "the documentation changed" from "the program changed".
 - **Byte-exact checkouts are part of the claim, so `.gitattributes` pins them.** `source_cid` is a
   sha256 over file *bytes*, and `* -text` disables end-of-line conversion for every path. Without it,
   a clone with `core.autocrlf=true` (the default on many Windows setups) rewrites LF to CRLF, and the
@@ -161,10 +189,16 @@ this document is trying to pin down.
   (`verify` 0, `verify --strict` 2). **The storage REST smoke test fails** (exit 101 after 30 s):
   there is no local Logos Storage gateway on `:8080`. It is left failing rather than skipped, because
   a test that silently skips proves nothing.
-- **Delivery of the seed bundle is a release asset, pending.** The bundle
-  (`prov-seeds.tar.gz`, 598,990,268 B, sha256 `1a8ef1f4…`) exists only on this machine until it is
-  attached to a GitHub release beside this repository; the 2.2 GB seeded builder image is an
-  accelerator anyone can rebuild from the bundle, not something a verifier is obliged to trust.
+- **Delivery of the seed bundle is still the open half of reproducibility.** The bundle
+  (`prov-seeds.tar.gz`, 598,990,268 B, sha256
+  `1a8ef1f41d4bf07edcf6f6a8876f1caf71acac9529038f595553fcf6536ed2df`) is the *content* of inputs (3)
+  and (4), and it currently exists on this machine and nowhere else. The intended delivery is a GitHub
+  release asset beside this repository: if you are reading this in the published repository and that
+  release has no such asset, then reproducing from cold still requires the archive to be handed over
+  out of band, and that gap is real rather than papered over. What has been measured is the local path
+  (`BUNDLE=` verifies the archive against `artifacts/seed-bundle.sha256` before using it, then rebuilds
+  the builder image from it). The 2.2 GB seeded builder image is an accelerator anyone can rebuild from
+  the bundle, not something a verifier is obliged to trust.
 - The builder image digest on chain is the **upstream base** digest (`3e12f71b…`), because that is
   the pin the claim actually depends on; the seeded wrapper image is derived content.
 - `scripts/*` are run with `bash <script>`; several carry non-obvious environment caveats recorded
