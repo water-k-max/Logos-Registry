@@ -133,8 +133,8 @@
   "schema": 1,
   "source": {
     "bundle_cid": null,
-    "commit": "921c6fc27842d3c7eec15dc505f8cd1a2658cc88",
-    "file_count": 87,
+    "commit": "554ab75b727af7bc4642c5cac836ab1ac015b08c",
+    "file_count": 88,
     "files": [
       {
         "path": ".gitattributes",
@@ -158,7 +158,7 @@
       },
       {
         "path": "README.md",
-        "sha256": "88ff50b386cc5f83d6c59a421a04366cdfcba410f03f9a829e759e715f94b34e"
+        "sha256": "f5abe14fd7c8532307214347c7fee9e7c0c1db0f1e59ff25e156b3b1f4a3f437"
       },
       {
         "path": "docker/build-guest.Dockerfile",
@@ -353,6 +353,10 @@
         "sha256": "b2d51e19abdd9beb5c3ce5e58962b31f3a6f9298e38b536a00cf3530a7139c37"
       },
       {
+        "path": "scripts/published_tree_check.sh",
+        "sha256": "71cbae406e31f843ecad609b95a4a742867677865d54f4dfef153928a2e865c5"
+      },
+      {
         "path": "scripts/pull_deps_reproduction.sh",
         "sha256": "e903eb4bd3a1f6681e3620f083d608eef1461472feb7f2889495c8df90710755"
       },
@@ -486,6 +490,6 @@
       }
     ],
     "repo_url": "https://github.com/water-k-max/Logos-Registry",
-    "tree_sha256": "a6089c12b8d88e76482aa624e59c875cf844451c8380e202b87e606167cbe019"
+    "tree_sha256": "0512cde1f06a1ea1d6bb7bb91b2cc0caa0226537f75778a7e9a893b2b395a1d9"
   }
 }
