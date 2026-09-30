@@ -122,7 +122,7 @@ build context supplied none.
 | `tools/lezreg/` | builds and submits registry instructions, including `attach-manifest` (the Tier-3 record now on chain) |
 | `tools/risc0-packager/` | ELF → `.bin` (segment wrapping), so ImageID is computed from what actually deploys |
 | `docker/` | the sealed guest recipe and the seeded builder image |
-| `scripts/` | the measurements above, plus the one-command verifier and its exit-code harness |
+| `scripts/` | the measurements above, plus the one-command verifier, its exit-code harness, and `published_tree_check.sh` (does what GitHub *serves* hash to the claimed `source_cid`?) |
 
 The scaffolding targets (`make build`, `make idl`, `make deploy`, `make cli ARGS="--help"`, see
 `Makefile`) are the standard spel workflow and are what this program was developed against. The path
@@ -141,16 +141,18 @@ this document is trying to pin down.
   `artifacts/outside-full.log`, `artifacts/outside-postreclaim.log`.
 - **Published is not the same claim as verifiable, so they are measured separately.** This tree is on
   GitHub at `https://github.com/water-k-max/Logos-Registry` (`main`, public). The history got there
-  without rewriting anything a reviewer could already see: the frozen commit was merged with the
+  without rewriting anything a reviewer could already see: the freeze commit was merged with the
   repository's initial commit (`.gitattributes` resolved to the `* -text` version, so the merged tree
   oid equals the frozen tree oid) and the push was a fast-forward; the pre-publication placeholder is
-  still reachable on the branch `placeholder-initial`. The check worth running goes one step past the
-  git object store: fetch what GitHub actually *serves*, then hash the pruned file set and compare it
-  to the manifest. Measured that way on 2026-09-30 — the tarball of `main` unpacked to 159 files /
-  6,543,880 B with `* -text` intact, 87 of them outside the pruned set and therefore covered by
-  `source_cid`, and `lezbuild verify` against the extracted tree reported a `source_tree_actual` equal
-  to the manifest's `source_cid`, `GUEST GRAPH MATCHES`, exit 0. Those file and byte counts describe one
-  tree at one moment; the invariant is the equality, not the numbers.
+  still reachable on the branch `placeholder-initial`.
+  The check worth running goes one step past the git object store: fetch what GitHub actually *serves*,
+  then hash the pruned file set and compare it with the manifest. That is what
+  `scripts/published_tree_check.sh` does — it downloads the archive of a branch over HTTPS, unpacks it,
+  and runs `lezbuild verify` against the extracted bytes rather than against this working copy. Its
+  output is `artifacts/published-tree-check.txt`. That file carries the timestamp, the tip commit, the
+  file and byte counts and the HTTP status, because those describe one tree at one moment and putting
+  them in this document would make the document the thing that goes stale. The claim in this bullet is
+  only the invariant: the served bytes hash to the `source_cid` the manifest and the chain name.
 - **No document inside this tree can quote this tree's hash, so none does.** `source_cid` is a sha256
   over sorted `(path, content-sha256)` pairs for every file outside the pruned set (`target`, `.git`,
   `artifacts`, `gitdb`, `regcache`, `.cargo`, `node_modules` — see `PRUNE` in
