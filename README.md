@@ -18,7 +18,7 @@ evidence that the deployed binary can be reproduced from a pinned, offline input
 | guest `.bin` | `6bd3e46c59b50f4be28702811cf69ab0dd28db640425efc287ea0ecb8c2b887b` |
 | network | `https://testnet.lez.logos.co/` |
 | public source | `https://github.com/water-k-max/Logos-Registry`, branch `main`, visibility `public` (re-checked anonymously on 2026-09-30) |
-| registry entry for this program | account `Hm4Yzd2vgTCvhvPFQUzLT2xoYidRK84QYBzPLQnH8dbJ` (PDA under the registry's own namespace), `REGISTERED`. The source re-attach described under *Status* writes on-chain revision **3**; revision **2** is what the record held before that write. |
+| registry entry for this program | account `Hm4Yzd2vgTCvhvPFQUzLT2xoYidRK84QYBzPLQnH8dbJ` (PDA under the registry's own namespace), `REGISTERED`, carrying the Tier-3 manifest fields described under *Status*. Its `revision` increments with every write, so the number is read from the chain rather than quoted here — the verifier compares the *values*, which is the part that has to agree. |
 | registering authority | `8tWS2X8e59Q4FYUUExxxFzpNjbQirzkFjDjYSukVzsqe` |
 | block explorer | `https://explorer.testnet.lez.logos.co/account/9J7yRA8WADpGRtSDaQ4TFyPz37hwD6JaSJTNteUEUU77` |
 
@@ -47,7 +47,9 @@ BUILD=1 BUNDLE=/path/to/prov-seeds.tar.gz BASE_TAG=r0.1.88.0-provseed-bundle1 \
 ```
 
 `BUNDLE=` verifies the archive against `artifacts/seed-bundle.sha256`, unpacks the two cargo caches,
-and rebuilds the builder image from them before doing the above.
+and rebuilds the builder image from them before doing the above. The archive itself is the asset of
+release `prov-seed-bundle-1` on this repository (see *Status* for how its served bytes were checked),
+and it is deliberately not a file in this tree.
 
 Exit codes are part of the contract, and the contract is pinned by
 `bash scripts/check_outside_exits.sh` (6 cases):
@@ -134,11 +136,14 @@ this document is trying to pin down.
 
 - **Reproducible: measured, not asserted.** The full chain (seed bundle → builder image rebuilt from
   it → cold sealed build with `--network none` and a brand-new cache id → manifest → live testnet
-  record) has been run end to end three times on 2026-09-29, at tip blocks 30232 and 30542 (twice):
-  166 crates compiled in 1m16s–2m07s, ELF `a1a0fdc8…` / 506,164 B, `ImageID` `7b4040d3…` — identical
-  to what is deployed. The third run happened *after* 28 GB of build caches were deleted, which is
-  the point: the claim does not depend on anything cached on this machine. Logs:
-  `artifacts/outside-full.log`, `artifacts/outside-postreclaim.log`.
+  record) has been run end to end four times: three times on 2026-09-29 at tip blocks 30232 and 30542
+  (twice), and once on 2026-09-30 at tip block 30850, 166 crates compiled in 1m16s–2m07s, ELF
+  `a1a0fdc8…` / 506,164 B, `ImageID` `7b4040d3…` — identical to what is deployed. The third run happened
+  *after* 28 GB of build caches were deleted, which is the point: the claim does not depend on anything
+  cached on this machine. The fourth is the first with every leg of the verifier enabled at once, tree
+  included, and it is the one that ran against the record this repository now publishes. Logs:
+  `artifacts/outside-full.log`, `artifacts/outside-postreclaim.log`,
+  `artifacts/verify-at-attach.log`.
 - **Published is not the same claim as verifiable, so they are measured separately.** This tree is on
   GitHub at `https://github.com/water-k-max/Logos-Registry` (`main`, public). The history got there
   without rewriting anything a reviewer could already see: the freeze commit was merged with the
@@ -167,14 +172,17 @@ this document is trying to pin down.
   `bash scripts/verify_from_the_outside.sh` with the tree leg enabled is what proves they still agree
   with your clone. The manifest also lists every pruned-free file with its own sha256, so when the tree
   leg fails the output names *which* file moved instead of just saying "stale".
-- **The on-chain `repo_url` and `commit` are being written, and were zero until now on purpose.**
-  Before the freeze they were empty/zero because a commit hash with no resolvable referent is a worse
-  claim than a blank field; `commit` in particular could not be set while the repository was not
-  public. The value names the last commit that touched a *hashed* file. Later commits are allowed to
-  exist and to change only pruned paths (regenerated evidence, rebuilt manifests) without invalidating
-  it — which is the property that lets this document be final before the numbers in it are refreshed.
-  `builder_digest` and `dep_audit_hash` are unchanged by the freeze — the guest did not move, and the
-  whole point of exit 4 is to distinguish "the documentation changed" from "the program changed".
+- **The on-chain `repo_url` and `commit` are written now; they were zero until this on purpose.**
+  Before the freeze they were empty because a commit hash with no resolvable referent is a worse claim
+  than a blank field, and `commit` in particular could not be set while the repository was not public.
+  The value names the last commit that touched a *hashed* file. Later commits are allowed to exist and
+  to change only pruned paths (regenerated evidence, rebuilt manifests) without invalidating it — which
+  is the property that lets this document be final before the numbers in it are refreshed. One encoding
+  note, because it is a convention rather than a fact about git: that field is a fixed 32 bytes and a git
+  object id is 20, so the id is stored left-padded with twelve zero bytes, which keeps the id readable
+  byte-for-byte at the end of the field; the verifier does not compare it. `builder_digest` and
+  `dep_audit_hash` are unchanged by the freeze — the guest did not move, and the whole point of exit 4 is
+  to distinguish "the documentation changed" from "the program changed".
 - **Byte-exact checkouts are part of the claim, so `.gitattributes` pins them.** `source_cid` is a
   sha256 over file *bytes*, and `* -text` disables end-of-line conversion for every path. Without it,
   a clone with `core.autocrlf=true` (the default on many Windows setups) rewrites LF to CRLF, and the
@@ -192,16 +200,22 @@ this document is trying to pin down.
   holding (`verify` 0, `verify --strict` 2). **The storage REST smoke test fails** (exit 101 after
   30 s): there is no local Logos Storage gateway on `:8080`. It is left failing rather than skipped,
   because a test that silently skips proves nothing.
-- **Delivery of the seed bundle is still the open half of reproducibility.** The bundle
+- **The seed bundle is published, and what the server delivers has been re-hashed.** The bundle
   (`prov-seeds.tar.gz`, 598,990,268 B, sha256
   `1a8ef1f41d4bf07edcf6f6a8876f1caf71acac9529038f595553fcf6536ed2df`) is the *content* of inputs (3)
-  and (4), and it currently exists on this machine and nowhere else. The intended delivery is a GitHub
-  release asset beside this repository: if you are reading this in the published repository and that
-  release has no such asset, then reproducing from cold still requires the archive to be handed over
-  out of band, and that gap is real rather than papered over. What has been measured is the local path
-  (`BUNDLE=` verifies the archive against `artifacts/seed-bundle.sha256` before using it, then rebuilds
-  the builder image from it). The 2.2 GB seeded builder image is an accelerator anyone can rebuild from
-  the bundle, not something a verifier is obliged to trust.
+  and (4). It is a release asset rather than a file in this tree —
+  `https://github.com/water-k-max/Logos-Registry/releases/tag/prov-seed-bundle-1` — because 599 MB of
+  cargo caches would make the clone unusable and would not be covered by `source_cid` in any case. It
+  was checked the way the published tree is checked: by fetching what the server actually serves rather
+  than trusting what was uploaded. Streaming that asset URL through `sha256sum` returned `1a8ef1f4…`
+  over 598,990,268 B at HTTP 200, and GitHub's own asset `digest` field reports the same value; the
+  measurement is `artifacts/release-asset-check.txt`. The local pin is `artifacts/seed-bundle.sha256`,
+  which `BUNDLE=` verifies before it uses an archive, so a substituted bundle fails instead of silently
+  changing the build. Two limits worth stating: **a release asset is mutable** — whoever controls the
+  account can replace or delete it, so it is the sha256 that binds it, not the URL; and **the asset sits
+  outside `source_cid`**, so the tree leg of the verifier says nothing about its contents. The 2.2 GB
+  seeded builder image stays an accelerator anyone can rebuild from the bundle, not something a verifier
+  is obliged to trust.
 - The builder image digest on chain is the **upstream base** digest (`3e12f71b…`), because that is
   the pin the claim actually depends on; the seeded wrapper image is derived content.
 - `scripts/*` are run with `bash <script>`; several carry non-obvious environment caveats recorded
