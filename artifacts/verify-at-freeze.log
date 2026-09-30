@@ -1,0 +1,28 @@
+# verify transcript for the 2026-09-30T00:30:05Z source freeze
+# claim under test: commits that touch only pruned paths (artifacts/) cannot move source_cid,
+# so documentation can be final before the numbers inside it are refreshed.
+
+## checked out at the manifest commit 41a84f4 -- docs pinned at 554ab75
+manifest: 2 guest-graph crate manifests, 821 external crates, source tree 0512cde1f06a1ea1d6bb7bb91b2cc0caa0226537f75778a7e9a893b2b395a1d9
+source_tree_actual 0512cde1f06a1ea1d6bb7bb91b2cc0caa0226537f75778a7e9a893b2b395a1d9
+GUEST GRAPH MATCHES — every guest-graph manifest, source file, Cargo.lock and dependency set is what the build was claimed from
+verify_exit_at_41a84f4=0
+back_on=master 01eb86e
+
+## at HEAD after the evidence commit (only artifacts/ added since 41a84f4)
+manifest: 2 guest-graph crate manifests, 821 external crates, source tree 0512cde1f06a1ea1d6bb7bb91b2cc0caa0226537f75778a7e9a893b2b395a1d9
+source_tree_actual 0512cde1f06a1ea1d6bb7bb91b2cc0caa0226537f75778a7e9a893b2b395a1d9
+GUEST GRAPH MATCHES — every guest-graph manifest, source file, Cargo.lock and dependency set is what the build was claimed from
+verify_exit_at_head=0
+
+## paths differing between the pinned docs commit 554ab75 and this HEAD -- expect artifacts/ only
+artifacts/m-b-evidence.txt
+artifacts/reproducible-build.json
+
+## source_cid as the manifest records it
+0512cde1f06a1ea1d6bb7bb91b2cc0caa0226537f75778a7e9a893b2b395a1d9
+
+## sweep section 11 -- the commit the 47 passing tests describe
+=== 11. which tree this evidence describes ===
+41a84f4 Regenerate the reproducibility manifest for the published tree
+1
