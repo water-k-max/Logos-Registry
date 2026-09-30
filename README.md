@@ -179,16 +179,17 @@ this document is trying to pin down.
   reviewer's tree no longer hashes to the published value even though the program is bit-identical.
   If you are on Windows, verify with `git config core.autocrlf input` or just trust this file: it is
   the reason it exists.
-- **Tests: 47 passing, re-measured after the cache deletion, and one that still fails.** Regenerate
-  with `bash scripts/m_b_evidence.sh` (it recompiles the workspace from source, so the first run on a
-  fresh clone is slow); its output is `artifacts/m-b-evidence.txt`, and section 11 names the commit
-  the numbers describe. Current sweep (2026-09-29, commit `36a319d`): `provenance_core` 5,
-  `lezreg` 14 (2 ABI + 12 CLI-contract), `lezbuild` 9, `sdk` 19 → **47 hermetic passing**, plus the
-  live chain read passing against the testnet, `RISC0_SKIP_BUILD=1 cargo check --offline --workspace
-  --all-targets` exit 0, and the verifier's six-case exit-code contract holding
-  (`verify` 0, `verify --strict` 2). **The storage REST smoke test fails** (exit 101 after 30 s):
-  there is no local Logos Storage gateway on `:8080`. It is left failing rather than skipped, because
-  a test that silently skips proves nothing.
+- **Tests: 47 passing, and the number is a measurement with a regeneration command, not a memory.**
+  Regenerate with `bash scripts/m_b_evidence.sh` (it recompiles the workspace from source, so the first
+  run on a fresh clone is slow); its output is `artifacts/m-b-evidence.txt`, whose section 11 names the
+  commit those numbers describe. The count lives there rather than in this document because a file
+  cannot quote the id of the commit that contains it without changing that id. As of the most recent
+  sweep: `provenance_core` 5, `lezreg` 14 (2 ABI + 12 CLI-contract), `lezbuild` 9, `sdk` 19 → **47
+  hermetic passing**, plus the live chain read passing against the testnet, `RISC0_SKIP_BUILD=1 cargo
+  check --offline --workspace --all-targets` exit 0, and the verifier's six-case exit-code contract
+  holding (`verify` 0, `verify --strict` 2). **The storage REST smoke test fails** (exit 101 after
+  30 s): there is no local Logos Storage gateway on `:8080`. It is left failing rather than skipped,
+  because a test that silently skips proves nothing.
 - **Delivery of the seed bundle is still the open half of reproducibility.** The bundle
   (`prov-seeds.tar.gz`, 598,990,268 B, sha256
   `1a8ef1f41d4bf07edcf6f6a8876f1caf71acac9529038f595553fcf6536ed2df`) is the *content* of inputs (3)
