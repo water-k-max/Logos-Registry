@@ -1,0 +1,22 @@
+# generated 2026-09-30T00:31:39Z by scripts/published_tree_check.sh
+# archive url: https://api.github.com/repos/water-k-max/Logos-Registry/tarball/main
+# local head: c90ec660cb69694d06f53709d168ad01a3eaf2cc (this run checks the published branch, not this commit)
+
+http_status     = 200
+archive_bytes   = 2359572
+archive_sha256  = e434268098db7d14aac4cdc66de0e4ac4775d9054f70ef039f5e048f2f657309
+served_tree     = water-k-max-Logos-Registry-5df78d3
+served_commit   = 5df78d3
+served_files    = 161
+served_bytes    = 6489878
+gitattributes   = * -text   <- must be '-text', or end-of-line conversion
+                                        can rewrite the bytes source_cid hashes
+manifest_source_cid = 0512cde1f06a1ea1d6bb7bb91b2cc0caa0226537f75778a7e9a893b2b395a1d9
+manifest_commit     = 554ab75b727af7bc4642c5cac836ab1ac015b08c
+manifest_file_sha256= 077d55addd375e431a50e15ad2cfd72f05745d9638d3fbc55b03ff708f4c760f
+
+--- lezbuild verify against the bytes GitHub served ---
+manifest: 2 guest-graph crate manifests, 821 external crates, source tree 0512cde1f06a1ea1d6bb7bb91b2cc0caa0226537f75778a7e9a893b2b395a1d9
+source_tree_actual 0512cde1f06a1ea1d6bb7bb91b2cc0caa0226537f75778a7e9a893b2b395a1d9
+GUEST GRAPH MATCHES — every guest-graph manifest, source file, Cargo.lock and dependency set is what the build was claimed from
+verify_exit     = 0   (0 = published bytes == the source_cid the manifest claims)
