@@ -1,14 +1,14 @@
-# generated 2026-09-30T00:31:39Z by scripts/published_tree_check.sh
+# generated 2026-09-30T01:06:03Z by scripts/published_tree_check.sh
 # archive url: https://api.github.com/repos/water-k-max/Logos-Registry/tarball/main
-# local head: c90ec660cb69694d06f53709d168ad01a3eaf2cc (this run checks the published branch, not this commit)
+# local head: 08c2e6841ef7a0c466cec1e3c2676c95d00e3dc9 (this run checks the published branch, not this commit)
 
 http_status     = 200
-archive_bytes   = 2359572
-archive_sha256  = e434268098db7d14aac4cdc66de0e4ac4775d9054f70ef039f5e048f2f657309
-served_tree     = water-k-max-Logos-Registry-5df78d3
-served_commit   = 5df78d3
-served_files    = 161
-served_bytes    = 6489878
+archive_bytes   = 2359754
+archive_sha256  = 2e3c6b5ed72897ff87df7a1108bc5cf8dea997ffd31875dfda2d39e50ddc2b01
+served_tree     = water-k-max-Logos-Registry-a294814
+served_commit   = a294814
+served_files    = 163
+served_bytes    = 6493224
 gitattributes   = * -text   <- must be '-text', or end-of-line conversion
                                         can rewrite the bytes source_cid hashes
 manifest_source_cid = 0512cde1f06a1ea1d6bb7bb91b2cc0caa0226537f75778a7e9a893b2b395a1d9
