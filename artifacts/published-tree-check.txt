@@ -1,22 +1,22 @@
-# generated 2026-09-30T01:06:03Z by scripts/published_tree_check.sh
+# generated 2026-09-30T02:15:18Z by scripts/published_tree_check.sh
 # archive url: https://api.github.com/repos/water-k-max/Logos-Registry/tarball/main
-# local head: 08c2e6841ef7a0c466cec1e3c2676c95d00e3dc9 (this run checks the published branch, not this commit)
+# local head: 2a5674c56a6ce8a73e6f650739794295b75f7846 (this run checks the published branch, not this commit)
 
 http_status     = 200
-archive_bytes   = 2359754
-archive_sha256  = 2e3c6b5ed72897ff87df7a1108bc5cf8dea997ffd31875dfda2d39e50ddc2b01
-served_tree     = water-k-max-Logos-Registry-a294814
-served_commit   = a294814
-served_files    = 163
-served_bytes    = 6493224
+archive_bytes   = 2360620
+archive_sha256  = 98fa9154d0599d61a1b6bde5b8e92e36cfd1599c1b2f75a96e903878c2705966
+served_tree     = water-k-max-Logos-Registry-f138bf8
+served_commit   = f138bf8
+served_files    = 164
+served_bytes    = 6495492
 gitattributes   = * -text   <- must be '-text', or end-of-line conversion
                                         can rewrite the bytes source_cid hashes
-manifest_source_cid = 0512cde1f06a1ea1d6bb7bb91b2cc0caa0226537f75778a7e9a893b2b395a1d9
-manifest_commit     = 554ab75b727af7bc4642c5cac836ab1ac015b08c
-manifest_file_sha256= 077d55addd375e431a50e15ad2cfd72f05745d9638d3fbc55b03ff708f4c760f
+manifest_source_cid = 4b88590246b3cc848e6432388330db8eedb2773589ad74f85c95f8ba7ed6483c
+manifest_commit     = 3cc9b7e3ec2b5927c184b6a7552793cdd568c4c5
+manifest_file_sha256= c60de27ecef875590ddbbf6f4d268f4e42216a001c13a891d1985efd2e21e918
 
 --- lezbuild verify against the bytes GitHub served ---
-manifest: 2 guest-graph crate manifests, 821 external crates, source tree 0512cde1f06a1ea1d6bb7bb91b2cc0caa0226537f75778a7e9a893b2b395a1d9
-source_tree_actual 0512cde1f06a1ea1d6bb7bb91b2cc0caa0226537f75778a7e9a893b2b395a1d9
+manifest: 2 guest-graph crate manifests, 821 external crates, source tree 4b88590246b3cc848e6432388330db8eedb2773589ad74f85c95f8ba7ed6483c
+source_tree_actual 4b88590246b3cc848e6432388330db8eedb2773589ad74f85c95f8ba7ed6483c
 GUEST GRAPH MATCHES — every guest-graph manifest, source file, Cargo.lock and dependency set is what the build was claimed from
 verify_exit     = 0   (0 = published bytes == the source_cid the manifest claims)
